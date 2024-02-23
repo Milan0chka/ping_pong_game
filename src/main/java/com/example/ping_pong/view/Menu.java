@@ -1,4 +1,4 @@
-package com.example.ping_pong;
+package com.example.ping_pong.view;
 
 import com.example.ping_pong.controller.MenuListener;
 import com.example.ping_pong.controller.SceneSwitcher;
@@ -10,11 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-
-import static java.lang.Math.floor;
-import static java.lang.System.exit;
 
 public class Menu {
     private VBox mainMenu;
@@ -23,7 +18,6 @@ public class Menu {
     private TextField player1Name, player2Name, speedChangeRate, scoreLimit;
     private Slider ballSpeed;
     private ToggleGroup racketWidth, racketThickness;
-    private SceneSwitcher sceneSwitcher;
     private MenuListener menuListener;
 
     public Menu(MenuListener menuListener) {
@@ -32,6 +26,7 @@ public class Menu {
         createSettingMenu();
         createMainMenu();
         createGameMenu();
+        handleSettingAction();
     }
 
     private void initializeFields() {
@@ -60,7 +55,7 @@ public class Menu {
                 createSettingControl("BALL SPEED :", ballSpeed),
                 createSettingControl("BALL SPEED CHANGE:", speedChangeRate),
                 createToggleGroup("RACKET WIDTH :", this.racketWidth, "Small", 10, "Medium", 20, "Big", 30),
-                createToggleGroup("RACKET THICKNESS :", this.racketThickness, "Thin", 3, "Medium", 5, "Thick", 7),
+                createToggleGroup("RACKET THICKNESS :", this.racketThickness, "Thin", 1, "Medium", 3, "Thick", 5),
                 createSettingControl("SCORE LIMIT :", scoreLimit));
     }
 
@@ -101,17 +96,7 @@ public class Menu {
         button.getStyleClass().add("start-game-button");
 
         button.setOnAction(event -> {
-            if (menuListener.getGame().getPlayer1().getName().isEmpty()) {
-                applyPlayerNames();
-                applySettings();
-                sceneSwitcher.switchToGame();
-            } else if (settingMenu.isVisible()){
-                applySettings();
-                settingMenu.setVisible(false);
-                sceneSwitcher.switchToGame();
-            } else {
-                settingMenu.setVisible(true);
-            }
+            menuListener.setPlay(settingMenu);
         });
 
         return button;
@@ -198,24 +183,68 @@ public class Menu {
         return buttonWithIcon;
     }
 
-    public void applyPlayerNames(){
-        String p1Name = player1Name.getText().isEmpty() ? "Player 1" : player1Name.getText();
-        String p2Name = player2Name.getText().isEmpty() ? "Player 2" : player2Name.getText();
+//    public void applyPlayerNames(){
+//        String p1Name = player1Name.getText().isEmpty() ? "Player 1" : player1Name.getText();
+//        String p2Name = player2Name.getText().isEmpty() ? "Player 2" : player2Name.getText();
+//
+//        menuListener.setPlayerNames(p1Name,p2Name);
+//    }
 
-        menuListener.setPlayerNames(p1Name,p2Name);
+//    public void applySettings() {
+//        // Retrieve values from the UI components
+//        int speedRate = Integer.parseInt(speedChangeRate.getText());
+//        int scoreLim = Integer.parseInt(scoreLimit.getText());
+//        int bSpeed = (int)ballSpeed.getValue();
+//        int rWidth = (int) racketWidth.getSelectedToggle().getUserData();
+//        int rThickness = (int) racketThickness.getSelectedToggle().getUserData();;
+//
+//        menuListener.updateSettings(speedRate, scoreLim, bSpeed, rWidth, rThickness);
+//    }
+
+    public void handleSettingAction() {
+        player1Name.textProperty().addListener((observable, oldValue, newValue) -> {
+            // newValue contains the current text in the player1Name TextField
+            menuListener.setPlayer1Name(newValue);
+        });
+
+        player2Name.textProperty().addListener((observable, oldValue, newValue) -> {
+            // newValue contains the current text in the player2Name TextField
+            menuListener.setPlayer2Name(newValue);
+        });
+
+        ballSpeed.valueProperty().addListener((obs, oldVal, newVal) ->
+                menuListener.setBallSpeed(newVal.intValue()));
+
+        racketWidth.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                int racketWidthValue = (int) newValue.getUserData();
+                menuListener.setRacketWidth(racketWidthValue);
+            }
+        });
+
+        racketThickness.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                int racketThicknessValue = (int) newValue.getUserData();
+                menuListener.setRacketThickness(racketThicknessValue);
+            }
+        });
+
+        speedChangeRate.textProperty().addListener((observable, oldValue, newValue) -> {
+            // newValue contains the current text in the speedChangeRate TextField
+            if (!newValue.isEmpty()) {
+                menuListener.setSpeedChangeRate(Integer.parseInt(newValue));
+            }
+        });
+
+        scoreLimit.textProperty().addListener((observable, oldValue, newValue) -> {
+            // newValue contains the current text in the scoreLimit TextField
+            if (!newValue.isEmpty()) {
+                menuListener.setScoreLimit(Integer.parseInt(newValue));
+            }
+        });
     }
 
-    public void applySettings() {
-        // Retrieve values from the UI components
-        int speedRate = Integer.parseInt(speedChangeRate.getText());
-        int scoreLim = Integer.parseInt(scoreLimit.getText());
-        int bSpeed = (int)ballSpeed.getValue();
-        int rWidth = (int) racketWidth.getSelectedToggle().getUserData();
-        int rThickness = (int) racketThickness.getSelectedToggle().getUserData();;
 
-        // Call the method on the menu listener
-        menuListener.updateSettings(speedRate, scoreLim, bSpeed, rWidth, rThickness);
-    }
     public VBox getMainMenu() {
         return mainMenu;
     }
@@ -281,7 +310,4 @@ public class Menu {
         this.ballSpeed = ballSpeed;
     }
 
-    public void setSceneSwitcher(SceneSwitcher sceneSwitcher) {
-        this.sceneSwitcher = sceneSwitcher;
-    }
 }

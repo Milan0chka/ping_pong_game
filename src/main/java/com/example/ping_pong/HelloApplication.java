@@ -3,11 +3,11 @@ package com.example.ping_pong;
 import com.example.ping_pong.controller.LabController;
 import com.example.ping_pong.controller.MenuListener;
 import com.example.ping_pong.controller.SceneSwitcher;
+import com.example.ping_pong.view.LabCanvas;
+import com.example.ping_pong.view.Menu;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -18,16 +18,13 @@ public class HelloApplication extends Application implements SceneSwitcher {
 
     private LabCanvas canvas = new LabCanvas(500,500);
     private LabController labController = new LabController();
-    private MenuListener menuListener = new MenuListener(labController.getGame());
+    private MenuListener menuListener = new MenuListener(labController.getGame(), this);
     private Menu menu = new Menu(menuListener);
     private StackPane rootPane;
-    private Stage primaryStage;
     @Override
     public void start(Stage primaryStage) throws IOException {
-        this.primaryStage = primaryStage;
         this.rootPane = new StackPane();
         this.rootPane.setAlignment(Pos.CENTER);
-        menu.setSceneSwitcher(this);
 
         Scene mainScene = new Scene(rootPane, 500, 500);
         primaryStage.setTitle("PING-PONG");

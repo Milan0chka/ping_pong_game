@@ -9,7 +9,7 @@ public class Ball extends GameObject implements Resizable{
     public Ball(){
         super(230,230);
         this.radius = 15;
-        this.speed = 10;
+        this.speed = 5;
         this.speedChangeRate = 10;
     }
 

@@ -4,38 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12778f95-678e-4176-8c20-ae1383eba7e5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/HelloApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/LabCanvas.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/Menu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/LabController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/MenuListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/SceneSwitcher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Ball.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Game.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/GameObject.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Racket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Resizable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/ping_pong/hello-view.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/exit.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/icon.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/info.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/settings.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/star.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/stylesheet.css" afterDir="false" />
+    <list default="true" id="12778f95-678e-4176-8c20-ae1383eba7e5" name="Changes" comment="Version 1.0 (Game is not functional yet)">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/HelloApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/LabCanvas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/view/LabCanvas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/view/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/MenuListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/MenuListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/ping_pong/hello-view.fxml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,22 +82,23 @@
       <updated>1708421754802</updated>
       <workItem from="1708421756002" duration="25715000" />
       <workItem from="1708601322998" duration="18344000" />
-      <workItem from="1708698440422" duration="16210000" />
+      <workItem from="1708698440422" duration="23520000" />
     </task>
+    <task id="LOCAL-00001" summary="Version 1.0 (Game is not functional yet)">
+      <created>1708716639684</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1708716639684</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/MenuListener.java</url>
-          <line>62</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Version 1.0 (Game is not functional yet)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Version 1.0 (Game is not functional yet)" />
   </component>
 </project>

@@ -1,4 +1,4 @@
-package com.example.ping_pong;
+package com.example.ping_pong.view;
 
 import com.example.ping_pong.model.Ball;
 import com.example.ping_pong.model.Game;
@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.text.Font;
+
 
 public class LabCanvas extends Canvas {
     public LabCanvas(int width, int heigh){
@@ -24,9 +26,8 @@ public class LabCanvas extends Canvas {
         int racketOffset = (int) getWidth()/50;
         drawRacket(gc,game.getPlayer1(), racketOffset);
         drawRacket(gc, game.getPlayer2(), game.getWidth()- racketOffset- game.getPlayer1().getRacket().getThickness());
-        int textOffset = (int) getWidth()/4;
-        drawTitle(gc,game.getPlayer1(),textOffset);
-        drawTitle(gc,game.getPlayer2(), (double) -textOffset /2);
+        drawTitle(gc,game.getPlayer1(),getWidth()/10*2);
+        drawTitle(gc,game.getPlayer2(), getWidth()/10*6);
     }
 
     private void resetSize(Game game) {
@@ -60,10 +61,13 @@ public class LabCanvas extends Canvas {
     }
 
     public void drawTitle(GraphicsContext gc, Player player, double textOffsetX){
+        int fontSize = (int)getHeight()/25;
         gc.setFill(player.getColor());
+        gc.setFont(new Font("Consolas", fontSize));
         String score = player.getName() + " - " + player.getScore();
-        double midPos = getWidth()/2;
+
         double textOffsetY =  getHeight()/7;
-        gc.fillText(score, midPos-textOffsetX, textOffsetY);
+        gc.strokeText(score,textOffsetX, textOffsetY);
     }
+
 }

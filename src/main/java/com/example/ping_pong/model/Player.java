@@ -8,11 +8,11 @@ public class Player {
     private Racket racket;
     private Color color;
 
-    public Player(){
+    public Player(Color color){
         this.name = "";
         this.score = 0;
         this.racket = new Racket();
-        this.color = Color.BLACK;
+        this.color = color;
     }
 
     public String getName() {

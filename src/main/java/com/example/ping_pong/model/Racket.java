@@ -6,8 +6,8 @@ public class Racket extends GameObject implements Resizable{
 
     public Racket(){
         super(0,0);
-        this.width = 75;
-        this.thickness = 10;
+        this.width = 55;
+        this.thickness = 15;
     }
 
     public double getWidth() {

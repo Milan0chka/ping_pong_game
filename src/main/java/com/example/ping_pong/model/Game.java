@@ -1,5 +1,7 @@
 package com.example.ping_pong.model;
 
+import javafx.scene.paint.Color;
+
 public class Game implements Resizable{
     private Player player1;
     private Player player2;
@@ -9,12 +11,12 @@ public class Game implements Resizable{
     private double heigh;
 
     public Game() {
-        this.player1 =new Player();
-        this.player2 = new Player();
+        this.player1 =new Player(Color.BLUE);
+        this.player2 = new Player(Color.RED);
         this.ball = new Ball();
         this.scoreLimit = 10;
-        this.width=500;
-        this.heigh=500;
+        this.width = 650;
+        this.heigh = 550;
     }
 
     public Player getPlayer1() {

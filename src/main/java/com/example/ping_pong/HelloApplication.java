@@ -8,6 +8,7 @@ import com.example.ping_pong.view.Menu;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -16,45 +17,56 @@ import java.io.IOException;
 
 public class HelloApplication extends Application implements SceneSwitcher {
 
-    private LabCanvas canvas = new LabCanvas(500,500);
+    private LabCanvas canvas = new LabCanvas(650, 500);
     private LabController labController = new LabController();
     private MenuListener menuListener = new MenuListener(labController.getGame(), this);
     private Menu menu = new Menu(menuListener);
     private StackPane rootPane;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.rootPane = new StackPane();
         this.rootPane.setAlignment(Pos.CENTER);
 
-        Scene mainScene = new Scene(rootPane, 500, 500);
+        Scene mainScene = new Scene(rootPane, 650, 550);
         primaryStage.setTitle("PING-PONG");
         primaryStage.getIcons().add(new Image("/icon.jpg"));
 
-        primaryStage.setScene(mainScene);
         switchToMainMenu(); // Initialize with the main menu
-        primaryStage.show();
-        primaryStage.setMinHeight(500);
-        primaryStage.setMinWidth(500);
 
+        primaryStage.setMinHeight(550);
+        primaryStage.setMinWidth(650);
+
+        // Initialize window resize listeners
+        initializeResizeListeners(primaryStage);
+
+        primaryStage.setScene(mainScene);
+        primaryStage.show();
+    }
+
+    private void initializeResizeListeners(Stage primaryStage) {
+        addWidthListener(primaryStage);
+        addHeightListener(primaryStage);
+    }
+
+    private void addWidthListener(Stage primaryStage) {
         primaryStage.widthProperty().addListener(observable -> {
-            double factor= primaryStage.getWidth()/labController.getGame().getWidth();
-            System.out.println("Width changed " + primaryStage.getWidth()+" "+factor);
+            double factor = primaryStage.getWidth() / labController.getGame().getWidth();
+            System.out.println("Width changed " + primaryStage.getWidth() + " " + factor);
             labController.getGame().setWidth(primaryStage.getWidth());
             labController.getGame().resizeX(factor);
             canvas.drawGame(labController.getGame());
         });
+    }
 
+    private void addHeightListener(Stage primaryStage) {
         primaryStage.heightProperty().addListener(observable -> {
-            double factor= primaryStage.getHeight()/labController.getGame().getHeigh();
-            System.out.println("Height changed " + primaryStage.getHeight()+" "+factor);
+            double factor = primaryStage.getHeight() / labController.getGame().getHeigh();
+            System.out.println("Height changed " + primaryStage.getHeight() + " " + factor);
             labController.getGame().setHeigh(primaryStage.getHeight());
             labController.getGame().resizeY(factor);
             canvas.drawGame(labController.getGame());
         });
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 
     @Override
@@ -68,12 +80,12 @@ public class HelloApplication extends Application implements SceneSwitcher {
     public void switchToGame() {
         rootPane.getChildren().clear();
 
-        StackPane.setAlignment(canvas,Pos.CENTER);
+        StackPane.setAlignment(canvas, Pos.CENTER);
         rootPane.getChildren().add(canvas);
         canvas.drawGame(labController.getGame());
 
         HBox gameMenu = menu.getGameMenu();
-        StackPane.setAlignment(gameMenu,Pos.TOP_RIGHT);
+        StackPane.setAlignment(gameMenu, Pos.TOP_RIGHT);
         rootPane.getChildren().add(gameMenu);
 
         VBox settingOverlay = menu.getSettingMenu();
@@ -96,5 +108,9 @@ public class HelloApplication extends Application implements SceneSwitcher {
 
     public void setMenu(Menu menu) {
         this.menu = menu;
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 }

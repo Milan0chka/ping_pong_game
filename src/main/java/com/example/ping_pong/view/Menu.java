@@ -1,8 +1,6 @@
 package com.example.ping_pong.view;
 
 import com.example.ping_pong.controller.MenuListener;
-import com.example.ping_pong.controller.SceneSwitcher;
-import com.example.ping_pong.model.Racket;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -10,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class Menu {
     private VBox mainMenu;
@@ -18,14 +17,17 @@ public class Menu {
     private TextField player1Name, player2Name, speedChangeRate, scoreLimit;
     private Slider ballSpeed;
     private ToggleGroup racketWidth, racketThickness;
+    private ColorPicker colorPicker1, colorPicker2;
     private MenuListener menuListener;
 
     public Menu(MenuListener menuListener) {
         this.menuListener = menuListener;
         initializeFields();
+
         createSettingMenu();
         createMainMenu();
         createGameMenu();
+
         handleSettingAction();
     }
 
@@ -34,29 +36,31 @@ public class Menu {
         player2Name = new TextField();
         speedChangeRate = new TextField("10");
         scoreLimit = new TextField("10");
-        ballSpeed = new Slider(1,10,5);
+        ballSpeed = new Slider(1, 10, 5);
         racketWidth = new ToggleGroup();
         racketThickness = new ToggleGroup();
-     }
+        colorPicker1 = new ColorPicker(Color.BLUE);
+        colorPicker2 = new ColorPicker(Color.RED);
+    }
 
     private void createSettingMenu() {
         Label settingsLabel = createStyledLabel("GAME SETTINGS", "settings-label");
         VBox settingsBox = createSettingsBox();
         Button playButton = createPlayButton();
 
-        settingMenu = new VBox(10, settingsLabel, settingsBox,playButton);
+        settingMenu = new VBox(10, settingsLabel, settingsBox, playButton);
         styleVBox(settingMenu, "main-vbox");
-        this.settingMenu.setMaxWidth(450);
-        this.settingMenu.setMaxHeight(450);
+        settingMenu.setMaxWidth(450);
+        settingMenu.setMaxHeight(450);
     }
 
     private VBox createSettingsBox() {
         return new VBox(5,
-                createSettingControl("BALL SPEED :", ballSpeed),
+                createSettingControl("BALL SPEED:", ballSpeed),
                 createSettingControl("BALL SPEED CHANGE:", speedChangeRate),
-                createToggleGroup("RACKET WIDTH :", this.racketWidth, "Small", 10, "Medium", 20, "Big", 30),
-                createToggleGroup("RACKET THICKNESS :", this.racketThickness, "Thin", 1, "Medium", 3, "Thick", 5),
-                createSettingControl("SCORE LIMIT :", scoreLimit));
+                createToggleGroup("RACKET WIDTH:", racketWidth, "Small", 10, "Medium", 20, "Big", 30),
+                createToggleGroup("RACKET THICKNESS:", racketThickness, "Thin", 1, "Medium", 3, "Thick", 5),
+                createSettingControl("SCORE LIMIT:", scoreLimit));
     }
 
     private HBox createSettingControl(String label, javafx.scene.Node control) {
@@ -66,10 +70,10 @@ public class Menu {
         return hbox;
     }
 
-    private HBox createToggleGroup( String label, ToggleGroup group,
-                                    String n1,int n1v,
-                                    String n2,int n2v,
-                                    String n3, int n3v){
+    private HBox createToggleGroup(String label, ToggleGroup group,
+                                   String n1, int n1v,
+                                   String n2, int n2v,
+                                   String n3, int n3v) {
         Label settingLabel = new Label(label);
 
         RadioButton s = new RadioButton(n1);
@@ -86,7 +90,7 @@ public class Menu {
 
         m.setSelected(true);
 
-        HBox hbox = new HBox(10,settingLabel,s,m,b);
+        HBox hbox = new HBox(10, settingLabel, s, m, b);
         hbox.setAlignment(Pos.CENTER);
         return hbox;
     }
@@ -95,9 +99,7 @@ public class Menu {
         Button button = new Button("PLAY");
         button.getStyleClass().add("start-game-button");
 
-        button.setOnAction(event -> {
-            menuListener.setPlay(settingMenu);
-        });
+        button.setOnAction(event -> menuListener.setPlay(settingMenu));
 
         return button;
     }
@@ -118,58 +120,48 @@ public class Menu {
         Label titleLabel = createStyledLabel("PING-PONG", "title-label");
         HBox playerBox = createPlayerBox();
 
-        this.mainMenu = new VBox(10, titleLabel, playerBox, this.settingMenu);
-        this.mainMenu.setAlignment(Pos.CENTER);
+        mainMenu = new VBox(titleLabel, playerBox, settingMenu);
+        mainMenu.setAlignment(Pos.CENTER);
         styleVBox(mainMenu, "main-vbox");
     }
 
     private HBox createPlayerBox() {
         HBox hbox = new HBox(10,
-                createPlayerInput("PLAYER 1", player1Name),
-                createPlayerInput("PLAYER 2", player2Name));
+                createPlayerInput("PLAYER 1", player1Name, colorPicker1),
+                createPlayerInput("PLAYER 2", player2Name, colorPicker2));
         hbox.setAlignment(Pos.CENTER);
         return hbox;
     }
 
-    private VBox createPlayerInput(String label, TextField textField) {
+    private VBox createPlayerInput(String label, TextField textField, ColorPicker colorPicker) {
         Label playerLabel = new Label(label);
         textField.getStyleClass().add("player-text-field");
-        VBox box = new VBox(playerLabel, textField);
+        VBox box = new VBox(5, playerLabel, textField, colorPicker);
         box.setAlignment(Pos.CENTER);
         return box;
     }
 
-    private void createGameMenu(){
+    private void createGameMenu() {
         Button rate = createButtonWithIcon("/star.png");
         Button settings = createButtonWithIcon("/settings.png");
         Button info = createButtonWithIcon("/info.png");
         Button exit = createButtonWithIcon("/exit.png");
 
+        exit.setOnAction(event -> menuListener.setExit());
 
-        exit.setOnAction(event -> {
-           menuListener.setExit();
-        });
+        info.setOnAction(event -> menuListener.setAbout());
 
-        info.setOnAction(event -> {
-            menuListener.setAbout();
-        });
+        rate.setOnAction(event -> menuListener.setRate());
 
-        rate.setOnAction(event -> {
-            menuListener.setRate();
-        });
+        settings.setOnAction(event -> settingMenu.setVisible(!settingMenu.isVisible()));
 
-        settings.setOnAction(event -> {
-            settingMenu.setVisible(!settingMenu.isVisible());
-        });
-
-
-        this.gameMenu = new HBox(10,rate,info,settings,exit);
-        this.gameMenu.setAlignment(Pos.TOP_RIGHT);
-        this.gameMenu.setPadding(new Insets(10,10,10,10));
-        this.gameMenu.getStylesheets().add("stylesheet.css");
+        gameMenu = new HBox(10, rate, info, settings, exit);
+        gameMenu.setAlignment(Pos.TOP_RIGHT);
+        gameMenu.setPadding(new Insets(10, 10, 10, 10));
+        gameMenu.getStylesheets().add("stylesheet.css");
     }
 
-    private Button createButtonWithIcon(String pathName){
+    private Button createButtonWithIcon(String pathName) {
         Image image = new Image(pathName);
         ImageView imageView = new ImageView(image);
 
@@ -183,37 +175,12 @@ public class Menu {
         return buttonWithIcon;
     }
 
-//    public void applyPlayerNames(){
-//        String p1Name = player1Name.getText().isEmpty() ? "Player 1" : player1Name.getText();
-//        String p2Name = player2Name.getText().isEmpty() ? "Player 2" : player2Name.getText();
-//
-//        menuListener.setPlayerNames(p1Name,p2Name);
-//    }
-
-//    public void applySettings() {
-//        // Retrieve values from the UI components
-//        int speedRate = Integer.parseInt(speedChangeRate.getText());
-//        int scoreLim = Integer.parseInt(scoreLimit.getText());
-//        int bSpeed = (int)ballSpeed.getValue();
-//        int rWidth = (int) racketWidth.getSelectedToggle().getUserData();
-//        int rThickness = (int) racketThickness.getSelectedToggle().getUserData();;
-//
-//        menuListener.updateSettings(speedRate, scoreLim, bSpeed, rWidth, rThickness);
-//    }
-
     public void handleSettingAction() {
-        player1Name.textProperty().addListener((observable, oldValue, newValue) -> {
-            // newValue contains the current text in the player1Name TextField
-            menuListener.setPlayer1Name(newValue);
-        });
-
-        player2Name.textProperty().addListener((observable, oldValue, newValue) -> {
-            // newValue contains the current text in the player2Name TextField
-            menuListener.setPlayer2Name(newValue);
-        });
-
-        ballSpeed.valueProperty().addListener((obs, oldVal, newVal) ->
-                menuListener.setBallSpeed(newVal.intValue()));
+        player1Name.textProperty().addListener((observable, oldValue, newValue) -> menuListener.setPlayer1Name(newValue));
+        player2Name.textProperty().addListener((observable, oldValue, newValue) -> menuListener.setPlayer2Name(newValue));
+        colorPicker1.valueProperty().addListener((observable, oldColor, newColor) -> menuListener.setColor1(newColor));
+        colorPicker2.valueProperty().addListener((observable, oldColor, newColor) -> menuListener.setColor2(newColor));
+        ballSpeed.valueProperty().addListener((obs, oldVal, newVal) -> menuListener.setBallSpeed(newVal.intValue()));
 
         racketWidth.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -230,20 +197,17 @@ public class Menu {
         });
 
         speedChangeRate.textProperty().addListener((observable, oldValue, newValue) -> {
-            // newValue contains the current text in the speedChangeRate TextField
             if (!newValue.isEmpty()) {
                 menuListener.setSpeedChangeRate(Integer.parseInt(newValue));
             }
         });
 
         scoreLimit.textProperty().addListener((observable, oldValue, newValue) -> {
-            // newValue contains the current text in the scoreLimit TextField
             if (!newValue.isEmpty()) {
                 menuListener.setScoreLimit(Integer.parseInt(newValue));
             }
         });
     }
-
 
     public VBox getMainMenu() {
         return mainMenu;
@@ -268,7 +232,6 @@ public class Menu {
     public void setGameMenu(HBox gameMenu) {
         this.gameMenu = gameMenu;
     }
-
 
     public TextField getPlayer1Name() {
         return player1Name;
@@ -309,5 +272,4 @@ public class Menu {
     public void setBallSpeed(Slider ballSpeed) {
         this.ballSpeed = ballSpeed;
     }
-
 }

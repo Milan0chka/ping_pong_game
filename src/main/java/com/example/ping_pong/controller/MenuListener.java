@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.util.Optional;
 
@@ -31,37 +32,35 @@ public class MenuListener {
         });
     }
 
-    public void setRate(){
+    public void setRate() {
         System.out.println("RATE");
-        TextInputDialog dialog = new TextInputDialog(); // create an instance
+
+        TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Rate our game!");
-        dialog.setHeaderText("Rate out game from 1 to 10");
+        dialog.setHeaderText("Rate our game from 1 to 10");
 
         Optional<String> result = dialog.showAndWait();
 
-        result.ifPresent(string -> {
-
+        result.ifPresent(rating -> {
+            try {
+                int numericRating = Integer.parseInt(rating);
+                if (numericRating >= 1 && numericRating <= 10) {
+                    showAlert(Alert.AlertType.INFORMATION, "Thank you for rating our game!", "Your rating: " + numericRating);
+                } else {
+                    showAlert(Alert.AlertType.WARNING, "Invalid Rating", "Please enter a valid rating between 1 and 10.");
+                }
+            } catch (NumberFormatException e) {
+                showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter a valid numeric rating.");
+            }
         });
     }
 
-//    public void updateSettings(int speedChangeRate, int scoreLimit,
-//                               int ballSpeed, int racketWidth,
-//                               int racketThickness) {
-//        System.out.println("SETTIGNS");
-//        game.setScoreLimit(scoreLimit);
-//
-//        game.getBall().setSpeed(ballSpeed);
-//        game.getBall().setSpeedChangeRate(speedChangeRate);
-//
-//        double width = game.getWidth();
-//        double heigh = game.getHeigh();
-//
-//        game.getPlayer1().getRacket().setWidth(heigh / 100 * racketWidth);
-//        game.getPlayer2().getRacket().setWidth(heigh / 100 * racketWidth);
-//
-//        game.getPlayer1().getRacket().setThickness(width / 100 * racketThickness);
-//        game.getPlayer2().getRacket().setThickness(width / 100 * racketThickness);
-//    }
+    private void showAlert(Alert.AlertType alertType, String title, String contentText) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+    }
 
     public void setPlayer1Name(String playerName) {
         game.getPlayer1().setName(playerName);
@@ -70,6 +69,15 @@ public class MenuListener {
     public void setPlayer2Name(String playerName) {
         game.getPlayer2().setName(playerName);
     }
+
+    public void setColor1(Color color){
+        game.getPlayer1().setColor(color);
+    }
+
+    public void setColor2(Color color){
+        game.getPlayer2().setColor(color);
+    }
+
 
     public void setBallSpeed(int ballSpeed) {
         game.getBall().setSpeed(ballSpeed);

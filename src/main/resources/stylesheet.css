@@ -6,12 +6,8 @@
     -fx-background-color: rgba(256, 256, 256, 0.85);
 }
 
-.linear-grad{
-    -fx-background-color: linear-gradient(from 25px 25px to 100px 100px, #dc143c, #32cd32);
-}
-
 .title-label {
-    -fx-font-size: 61px;
+    -fx-font-size: 60px;
     -fx-text-fill: linear-gradient(to bottom right, blue, red);
 }
 

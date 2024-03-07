@@ -27,8 +27,7 @@ public class LabCanvas extends Canvas {
 
         int racketOffset = (int) getWidth() / 50;
         drawRacket(gc, game.getPlayer1(), racketOffset);
-        drawRacket(gc, game.getPlayer2(),
-                game.getWidth() - racketOffset - game.getPlayer1().getRacket().getThickness());
+        drawRacket(gc, game.getPlayer2(),  -racketOffset - game.getPlayer1().getRacket().getThickness());
 
         drawTitle(gc, game.getPlayer1(), getWidth() / 12 * 2);
         drawTitle(gc, game.getPlayer2(), getWidth() / 12 * 7);
@@ -54,8 +53,8 @@ public class LabCanvas extends Canvas {
 
     public void drawBall(GraphicsContext gc, Ball ball) {
         double radius = ball.getRadius();
-        double centerX = getWidth() / 2 - radius;
-        double centerY = getHeight() / 2 - radius;
+        double centerX = ball.getPositionX() - ball.getRadius();
+        double centerY = ball.getPositionY() - ball.getRadius();
 
         gc.setFill(Color.BLACK);
         gc.fillOval(centerX, centerY, radius, radius);
@@ -63,7 +62,7 @@ public class LabCanvas extends Canvas {
 
     public void drawRacket(GraphicsContext gc, Player player, double racketOffset) {
         double topLeftPositionX = player.getRacket().getPositionX() + racketOffset;
-        double topLeftPositionY = getHeight() / 2 + player.getRacket().getPositionY() - player.getRacket().getWidth() / 2;
+        double topLeftPositionY = player.getRacket().getPositionY();
 
         gc.setFill(player.getColor());
 

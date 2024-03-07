@@ -1,8 +1,6 @@
 package com.example.ping_pong;
 
-import com.example.ping_pong.controller.LabController;
-import com.example.ping_pong.controller.MenuListener;
-import com.example.ping_pong.controller.SceneSwitcher;
+import com.example.ping_pong.controller.*;
 import com.example.ping_pong.view.LabCanvas;
 import com.example.ping_pong.view.Menu;
 import javafx.application.Application;
@@ -92,6 +90,16 @@ public class HelloApplication extends Application implements SceneSwitcher {
         settingOverlay.setVisible(false);
         StackPane.setAlignment(settingOverlay, Pos.CENTER);
         rootPane.getChildren().add(settingOverlay);
+
+        KeyboardListener keyboardListener = new KeyboardListener( labController.getGame(), canvas);
+        canvas.setOnKeyPressed(keyboardListener );
+        canvas.setOnKeyTyped(keyboardListener);
+        canvas.setFocusTraversable(true);
+
+//        BallManager ballManager= new BallManager(labController.getGame(), canvas);
+//        Thread thread = new Thread(ballManager);
+//        thread.start();
+//        Thread.yield();
     }
 
     public LabCanvas getCanvas() {

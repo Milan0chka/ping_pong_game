@@ -4,16 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12778f95-678e-4176-8c20-ae1383eba7e5" name="Changes" comment="Version 1.1 (Game is not functional yet)">
+    <list default="true" id="12778f95-678e-4176-8c20-ae1383eba7e5" name="Changes" comment="Version 1.2 (Game is not functional yet)">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/BallManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/KeyboardListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/HelloApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/MenuListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/MenuListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Ball.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Racket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Racket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/view/LabCanvas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/view/LabCanvas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/view/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/view/Menu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/stylesheet.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/stylesheet.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,8 +23,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -84,7 +84,11 @@
       <updated>1708421754802</updated>
       <workItem from="1708421756002" duration="25715000" />
       <workItem from="1708601322998" duration="18344000" />
-      <workItem from="1708698440422" duration="29186000" />
+      <workItem from="1708698440422" duration="32020000" />
+      <workItem from="1709640725531" duration="530000" />
+      <workItem from="1709724010062" duration="10000" />
+      <workItem from="1709746319198" duration="10221000" />
+      <workItem from="1709806832445" duration="1023000" />
     </task>
     <task id="LOCAL-00001" summary="Version 1.0 (Game is not functional yet)">
       <created>1708716639684</created>
@@ -100,7 +104,14 @@
       <option name="project" value="LOCAL" />
       <updated>1708727521489</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Version 1.2 (Game is not functional yet)">
+      <created>1708733087008</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1708733087008</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -109,9 +120,19 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Version 1.0 (Game is not functional yet)" />
     <MESSAGE value="Version 1.1 (Game is not functional yet)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Version 1.1 (Game is not functional yet)" />
+    <MESSAGE value="Version 1.2 (Game is not functional yet)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Version 1.2 (Game is not functional yet)" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Ball.java</url>
+          <line>32</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="player.score" />

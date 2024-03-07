@@ -11,12 +11,12 @@ public class Game implements Resizable{
     private double heigh;
 
     public Game() {
-        this.player1 =new Player(Color.BLUE);
-        this.player2 = new Player(Color.RED);
-        this.ball = new Ball();
-        this.scoreLimit = 10;
         this.width = 650;
         this.heigh = 550;
+        this.player1 =new Player(Color.BLUE, 0);
+        this.player2 = new Player(Color.RED, 650);
+        this.ball = new Ball();
+        this.scoreLimit = 10;
     }
 
     public Player getPlayer1() {

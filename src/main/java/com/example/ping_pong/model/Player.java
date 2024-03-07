@@ -8,10 +8,10 @@ public class Player {
     private Racket racket;
     private Color color;
 
-    public Player(Color color){
+    public Player(Color color, double posX){
         this.name = "";
         this.score = 0;
-        this.racket = new Racket();
+        this.racket = new Racket(posX);
         this.color = color;
     }
 

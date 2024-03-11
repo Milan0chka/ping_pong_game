@@ -84,13 +84,16 @@ public class MenuListener {
     }
 
     public void setRacketWidth(int racketWidth) {
-        game.getPlayer1().getRacket().setWidth(game.getWidth()/100*racketWidth);
-        game.getPlayer2().getRacket().setWidth(game.getWidth()/100*racketWidth);
+        game.getPlayer1().getRacket().setWidth(game.getHeigh()/100*racketWidth);
+        game.getPlayer2().getRacket().setWidth(game.getHeigh()/100*racketWidth);
     }
 
     public void setRacketThickness(int racketThickness) {
-        game.getPlayer1().getRacket().setThickness(game.getHeigh()/100*racketThickness);
-        game.getPlayer2().getRacket().setThickness(game.getHeigh()/100*racketThickness);
+        game.getPlayer1().getRacket().setThickness(game.getWidth()/100*racketThickness);
+
+        double difference = game.getPlayer2().getRacket().getThickness() - game.getWidth()/100*racketThickness;
+        game.getPlayer2().getRacket().setThickness(game.getWidth()/100*racketThickness);
+        game.getPlayer2().getRacket().setPositionX(game.getPlayer2().getRacket().getPositionX() + difference);
     }
 
     public void setSpeedChangeRate(int speedChangeRate) {
@@ -101,17 +104,23 @@ public class MenuListener {
        game.setScoreLimit(scoreLimit);
     }
 
-    public void setPlay(VBox settingMenu){
-        settingMenu.setVisible(!settingMenu.isVisible());
-
+    public void setPlay(){
         if (game.getPlayer1().getName().isEmpty()) {
             game.getPlayer1().setName("Player 1");
         }
         if (game.getPlayer2().getName().isEmpty()) {
             game.getPlayer2().setName("Player 2");
         }
-
         sceneSwitcher.switchToGame();
+    }
+
+    public void toggleSettingMenu(VBox settingMenu){
+        if (settingMenu.isVisible())
+            game.getBall().setPause(false);
+        else
+            game.getBall().setPause(true);
+
+        settingMenu.setVisible(!settingMenu.isVisible());
     }
 
     public Game getGame() {

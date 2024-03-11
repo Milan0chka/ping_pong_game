@@ -36,7 +36,7 @@ public class Menu {
         player2Name = new TextField();
         speedChangeRate = new TextField("10");
         scoreLimit = new TextField("10");
-        ballSpeed = new Slider(1, 10, 5);
+        ballSpeed = new Slider(1, 20, 10);
         racketWidth = new ToggleGroup();
         racketThickness = new ToggleGroup();
         colorPicker1 = new ColorPicker(Color.BLUE);
@@ -46,9 +46,8 @@ public class Menu {
     private void createSettingMenu() {
         Label settingsLabel = createStyledLabel("GAME SETTINGS", "settings-label");
         VBox settingsBox = createSettingsBox();
-        Button playButton = createPlayButton();
 
-        settingMenu = new VBox(10, settingsLabel, settingsBox, playButton);
+        settingMenu = new VBox(10, settingsLabel, settingsBox);
         styleVBox(settingMenu, "main-vbox");
         settingMenu.setMaxWidth(450);
         settingMenu.setMaxHeight(450);
@@ -99,7 +98,7 @@ public class Menu {
         Button button = new Button("PLAY");
         button.getStyleClass().add("start-game-button");
 
-        button.setOnAction(event -> menuListener.setPlay(settingMenu));
+        button.setOnAction(event -> menuListener.setPlay());
 
         return button;
     }
@@ -119,8 +118,9 @@ public class Menu {
     private void createMainMenu() {
         Label titleLabel = createStyledLabel("PING-PONG", "title-label");
         HBox playerBox = createPlayerBox();
+        Button playButton = createPlayButton();
 
-        mainMenu = new VBox(titleLabel, playerBox, settingMenu);
+        mainMenu = new VBox(titleLabel, playerBox, settingMenu, playButton);
         mainMenu.setAlignment(Pos.CENTER);
         styleVBox(mainMenu, "main-vbox");
     }
@@ -153,7 +153,7 @@ public class Menu {
 
         rate.setOnAction(event -> menuListener.setRate());
 
-        settings.setOnAction(event -> settingMenu.setVisible(!settingMenu.isVisible()));
+        settings.setOnAction(event -> menuListener.toggleSettingMenu(settingMenu));
 
         gameMenu = new HBox(10, rate, info, settings, exit);
         gameMenu.setAlignment(Pos.TOP_RIGHT);
@@ -171,6 +171,7 @@ public class Menu {
         Button buttonWithIcon = new Button();
         buttonWithIcon.setGraphic(imageView);
         buttonWithIcon.getStyleClass().add("menu_button");
+        buttonWithIcon.setFocusTraversable(false);
 
         return buttonWithIcon;
     }

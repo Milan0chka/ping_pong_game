@@ -10,6 +10,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class LabCanvas extends Canvas {
 
@@ -23,14 +24,12 @@ public class LabCanvas extends Canvas {
 
         fillBackground(gc, game);
 
+        drawRacket(gc, game.getPlayer1());
+        drawRacket(gc, game.getPlayer2());
+
+        drawCenteredTitles(gc, game);
+
         drawBall(gc, game.getBall());
-
-        int racketOffset = (int) getWidth() / 50;
-        drawRacket(gc, game.getPlayer1(), racketOffset);
-        drawRacket(gc, game.getPlayer2(),  -racketOffset - game.getPlayer1().getRacket().getThickness());
-
-        drawTitle(gc, game.getPlayer1(), getWidth() / 12 * 2);
-        drawTitle(gc, game.getPlayer2(), getWidth() / 12 * 7);
     }
 
     private void resetSize(Game game) {
@@ -60,8 +59,8 @@ public class LabCanvas extends Canvas {
         gc.fillOval(centerX, centerY, radius, radius);
     }
 
-    public void drawRacket(GraphicsContext gc, Player player, double racketOffset) {
-        double topLeftPositionX = player.getRacket().getPositionX() + racketOffset;
+    public void drawRacket(GraphicsContext gc, Player player) {
+        double topLeftPositionX = player.getRacket().getPositionX();
         double topLeftPositionY = player.getRacket().getPositionY();
 
         gc.setFill(player.getColor());
@@ -71,16 +70,68 @@ public class LabCanvas extends Canvas {
                 player.getRacket().getWidth());
     }
 
-    public void drawTitle(GraphicsContext gc, Player player, double textOffsetX) {
-        int fontSize = (int) getHeight() / 20;
+    public void drawCenteredTitles(GraphicsContext gc, Game game) {
+        final int fontSize = (int) getHeight() / 20;
 
-        gc.setStroke(player.getColor());
-        gc.setLineWidth(1.5);
+        String player1Score = game.getPlayer1().getName() + " - " + game.getPlayer1().getScore() + "\t";
+        String player2Score = game.getPlayer2().getName() + " - " + game.getPlayer2().getScore();
 
-        gc.setFont(new Font("Consolas", fontSize));
-        String score = player.getName() + " - " + player.getScore();
+        double widthPlayer1 = findTextWidth(fontSize, player1Score);
+        double widthPlayer2 = findTextWidth(fontSize, player2Score);
 
-        double textOffsetY = getHeight() / 7;
-        gc.strokeText(score, textOffsetX, textOffsetY);
+        double startX = (getWidth() - widthPlayer1-widthPlayer2) / 2;
+        double yPos = getHeight() / 7;
+
+        // Draw Player 1 Score
+        styleText(gc, fontSize, game.getPlayer1().getColor(), 1.5);
+        gc.strokeText(player1Score, startX, yPos);
+
+        // Update startX for Player 2 Score
+        startX += widthPlayer1;
+
+        // Draw Player 2 Score
+        styleText(gc, fontSize, game.getPlayer2().getColor(), 1.5);
+        gc.strokeText(player2Score, startX, yPos);
     }
+
+    public void drawText(GraphicsContext gc, int fontPercent, String text,
+                         Color color, int lineWidth,
+                         double heightOffset, double widthOffset){
+        int fontSize = (int) getHeight() / fontPercent;
+
+        styleText(gc,fontSize,color,lineWidth);
+
+        double textOffsetY = getHeight() * heightOffset;
+        double textOffsetX = (getWidth() - findTextWidth(fontSize, text)) * widthOffset;
+
+        gc.strokeText(text, textOffsetX, textOffsetY);
+    }
+
+    public void styleText(GraphicsContext gc, int fontSize, Color color, double lineWidth){
+        gc.setFont(new Font("Consolas", fontSize));
+        gc.setStroke(color);
+        gc.setLineWidth(lineWidth);
+    }
+
+    public double findTextWidth(int fontSize, String message){
+        Text text = new Text(message);
+        text.setFont(new Font("Consolas", fontSize));
+        return text.getLayoutBounds().getWidth();
+    }
+    public void drawGoal(Player player){
+        GraphicsContext gc = super.getGraphicsContext2D();
+
+        drawText(gc, 10, "GOAL!", player.getColor(),3, 0.4, 0.5);
+
+        drawPressEnter();
+    }
+
+    public void drawPressEnter() {
+        GraphicsContext gc = super.getGraphicsContext2D();
+        String message = "Press Enter to start round";
+
+        drawText(gc,30, message, Color.GRAY, 1, 0.8, 0.5);
+    }
+
+
 }

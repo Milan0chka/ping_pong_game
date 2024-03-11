@@ -15,6 +15,10 @@ public class Player {
         this.color = color;
     }
 
+    public void score(){
+
+    }
+
     public String getName() {
         return name;
     }

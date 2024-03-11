@@ -9,45 +9,84 @@ public class Ball extends GameObject implements Resizable{
     private int speedChangeRate;
     private int directionY;
     private int directionX;
+    private boolean pause;
 
     public Ball(){
         super(325,275);
         this.radius = 15;
-        this.speed = 5;
+        this.speed = 3;
         this.speedChangeRate = 10;
+        this.pause = true;
         //direction of ball`s movement decides randomly
         this.directionX = random() >= 0.5 ? 1: -1;
         this.directionY = random() >= 0.5 ? 1: -1;
     }
-
     public void move(double height, double width) {
-        double halfHeight = height / 2;
-        double halfWidth = width / 2;
+        if (!pause){
 
+            checkVerticalCollision(height);
 
-        checkHorizontalCollision(halfWidth);
-        checkVerticalCollision(halfHeight);
-
-
-        this.setPositionX(directionX * speed);
-        this.setPositionY(directionY * speed);
+            // Update the position based on the current position, direction, and speed
+            this.setPositionX(this.getPositionX() + directionX * speed);
+            this.setPositionY(this.getPositionY() + directionY * speed);
+        }
     }
 
-    private void checkHorizontalCollision(double halfWidth) {
-        double futurePosX = this.getPositionX() + directionX * speed;
-
-        if (futurePosX - radius < -halfWidth || futurePosX + radius > halfWidth)
-            directionX *= -1;
-
-    }
-
-    private void checkVerticalCollision(double halfHeight) {
+    private void checkVerticalCollision(double height) {
         double futurePosY = this.getPositionY() + directionY * speed;
 
-        if (futurePosY - radius < -halfHeight || futurePosY + radius > halfHeight)
-            directionY *= -1;
-
+        if (futurePosY - radius < 0 || futurePosY + radius > height)
+            directionY *= -1; // Reverse direction on collision
     }
+
+    public void bounceFromRacket(Racket racket1, Racket racket2) {
+        Racket activeRacket = this.getDirectionX() == -1 ? racket1 : racket2;
+
+        double racketLeft = activeRacket.getPositionX();
+        double racketRight = racketLeft + activeRacket.getThickness();
+        double racketTop = activeRacket.getPositionY();
+        double racketBottom = racketTop + activeRacket.getWidth();
+
+        double ballLeft = this.getPositionX() - this.getRadius();
+        double ballRight = this.getPositionX() + this.getRadius();
+        double ballTop = this.getPositionY() - this.getRadius();
+        double ballBottom = this.getPositionY() + this.getRadius();
+
+        // Check collision based on ball direction
+        boolean collision = this.getDirectionX() == -1 ?
+                (ballLeft < racketRight && ballBottom > racketTop && ballTop < racketBottom) :
+                (ballRight > racketLeft + 15 && ballBottom > racketTop && ballTop < racketBottom);
+
+        if (collision) {
+            this.setDirectionX(-this.getDirectionX());
+        }
+    }
+
+
+    public boolean isPause(){
+        return this.pause;
+    }
+
+    public void setPause(boolean pause){
+        this.pause = pause;
+    }
+
+    public int getDirectionY() {
+        return directionY;
+    }
+
+    public void setDirectionY(int directionY) {
+        this.directionY = directionY;
+    }
+
+    public int getDirectionX() {
+        return directionX;
+    }
+
+    public void setDirectionX(int directionX) {
+        this.directionX = directionX;
+    }
+
     public int getSpeed() {
         return speed;
     }

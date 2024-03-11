@@ -2,6 +2,8 @@ package com.example.ping_pong.controller;
 
 import com.example.ping_pong.model.Ball;
 import com.example.ping_pong.model.Game;
+import com.example.ping_pong.model.Player;
+import com.example.ping_pong.model.Racket;
 import com.example.ping_pong.view.LabCanvas;
 
 public class BallManager implements Runnable{
@@ -14,29 +16,47 @@ public class BallManager implements Runnable{
     @Override
     public void run() {
         Ball ball = game.getBall();
-        int counter=0;
         while(true) {
-            counter++;
 
             try {
-                Thread.sleep(10);
+                Thread.sleep(15);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
 
             ball.move(game.getHeigh(), game.getWidth());
+            ball.bounceFromRacket(game.getPlayer1().getRacket(), game.getPlayer2().getRacket());
 
-//            if (ball.getPosX()<10)
-//            {
-////player 2 has scored, add code here
-//            }
-//            if (ball.getPosX()>game.getDimensionX()-ball.getRadius())
-//            {
-////player 1 has scored, add code here
-//            }
-//// CODE to CHECK BOUNCING WITH RACKET
+            checkGoal(ball);
 
             canvas.drawGame(game);
+            if (ball.isPause())
+                canvas.drawPressEnter();
         }
     }
+
+    private void checkGoal(Ball ball){
+        Player playerScored;
+
+        if (ball.getPositionX() < ball.getRadius()){
+            game.getPlayer2().setScore(game.getPlayer2().getScore()+1);
+            playerScored = game.getPlayer2();
+        }
+        else if (ball.getPositionX() > game.getWidth() - ball.getRadius()){
+            game.getPlayer1().setScore(game.getPlayer1().getScore()+1);
+            playerScored = game.getPlayer1();
+        }
+        else
+            return;
+
+        game.resetGame();
+        canvas.drawGoal(playerScored);
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }

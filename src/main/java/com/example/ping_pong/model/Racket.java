@@ -5,7 +5,7 @@ public class Racket extends GameObject implements Resizable{
     private double thickness;
 
     public Racket(double PosX){
-        super(PosX,260);
+        super(PosX,210);
         this.width = 130;
         this.thickness = 15;
     }

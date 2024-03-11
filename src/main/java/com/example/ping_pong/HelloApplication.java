@@ -91,15 +91,15 @@ public class HelloApplication extends Application implements SceneSwitcher {
         StackPane.setAlignment(settingOverlay, Pos.CENTER);
         rootPane.getChildren().add(settingOverlay);
 
-        KeyboardListener keyboardListener = new KeyboardListener( labController.getGame(), canvas);
+        KeyboardListener keyboardListener = new KeyboardListener( labController.getGame());
         canvas.setOnKeyPressed(keyboardListener );
         canvas.setOnKeyTyped(keyboardListener);
         canvas.setFocusTraversable(true);
 
-//        BallManager ballManager= new BallManager(labController.getGame(), canvas);
-//        Thread thread = new Thread(ballManager);
-//        thread.start();
-//        Thread.yield();
+        BallManager ballManager = new BallManager(labController.getGame(), canvas);
+        Thread thread = new Thread(ballManager);
+        thread.start();
+        Thread.yield();
     }
 
     public LabCanvas getCanvas() {

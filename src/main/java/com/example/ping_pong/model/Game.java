@@ -2,6 +2,7 @@ package com.example.ping_pong.model;
 
 import javafx.scene.paint.Color;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 public class Game implements Resizable{
@@ -16,7 +17,7 @@ public class Game implements Resizable{
     public Game() {
         this.width = 650;
         this.heigh = 550;
-        this.player1 =new Player(Color.BLUE, 15);
+        this.player1 = new Player(Color.BLUE, 15);
         this.player2 = new Player(Color.RED, 620);
         this.ball = new Ball();
         this.scoreLimit = 10;
@@ -29,6 +30,7 @@ public class Game implements Resizable{
         ball.setPositionY(getHeigh()/2);
         ball.setPositionX(getWidth()/2);
         ball.setDirectionX(-ball.getDirectionX());
+        ball.setBounceCount(0);
         this.isPaused = true;
     }
 

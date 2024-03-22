@@ -12,6 +12,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.util.Objects;
+
 public class Menu {
     private VBox mainMenu;
     private VBox settingMenu;
@@ -34,15 +36,23 @@ public class Menu {
     }
 
     private void initializeFields() {
-        player1Name = new TextField();
-        player2Name = new TextField();
-        speedChangeRate = new TextField("10");
-        scoreLimit = new TextField("10");
-        ballSpeed = new Slider(1, 20, 10);
+        if (Objects.equals(menuListener.getGameSettings().getPlayer1Name(), "Player 1")
+                && Objects.equals(menuListener.getGameSettings().getPlayer2Name(), "Player 2")){
+            player1Name = new TextField();
+            player2Name = new TextField();
+        } else {
+            player1Name = new TextField(menuListener.getGameSettings().getPlayer1Name());
+            player2Name = new TextField(menuListener.getGameSettings().getPlayer2Name());
+        }
+
+        speedChangeRate = new TextField(String.valueOf( menuListener.getGameSettings().getSpeedChangeRate()));
+        scoreLimit = new TextField(String.valueOf(menuListener.getGameSettings().getScoreLimit()));
+        ballSpeed = new Slider(1, 20, menuListener.getGameSettings().getBallSpeed());
         racketWidth = new ToggleGroup();
         racketThickness = new ToggleGroup();
-        colorPicker1 = new ColorPicker(Color.BLUE);
-        colorPicker2 = new ColorPicker(Color.RED);
+        colorPicker1 = new ColorPicker(menuListener.getGameSettings().getPlayer1Color());
+        colorPicker2 = new ColorPicker(menuListener.getGameSettings().getPlayer2Color());
+
     }
 
     private void createSettingMenu() {
@@ -56,11 +66,14 @@ public class Menu {
     }
 
     private VBox createSettingsBox() {
+        int selectedWidth = menuListener.getGameSettings().getRacketWidth();
+        int selectedThickness = menuListener.getGameSettings().getRacketThickness();
+
         return new VBox(5,
                 createSettingControl("BALL SPEED:", ballSpeed),
                 createSettingControl("BALL SPEED CHANGE:", speedChangeRate),
-                createToggleGroup("RACKET WIDTH:", racketWidth, "Small", 10, "Medium", 20, "Big", 30),
-                createToggleGroup("RACKET THICKNESS:", racketThickness, "Thin", 1, "Medium", 3, "Thick", 5),
+                createToggleGroup("RACKET WIDTH:", racketWidth, "Small", 10, "Medium", 20, "Big", 30, selectedWidth),
+                createToggleGroup("RACKET THICKNESS:", racketThickness, "Thin", 1, "Medium", 3, "Thick", 5, selectedThickness),
                 createSettingControl("SCORE LIMIT:", scoreLimit));
     }
 
@@ -74,7 +87,8 @@ public class Menu {
     private HBox createToggleGroup(String label, ToggleGroup group,
                                    String n1, int n1v,
                                    String n2, int n2v,
-                                   String n3, int n3v) {
+                                   String n3, int n3v,
+                                   int selectedValue) {
         Label settingLabel = new Label(label);
 
         RadioButton s = new RadioButton(n1);
@@ -89,7 +103,12 @@ public class Menu {
         m.setToggleGroup(group);
         b.setToggleGroup(group);
 
-        m.setSelected(true);
+        if (selectedValue == n1v)
+            s.setSelected(true);
+        else if (selectedValue == n3v)
+            b.setSelected(true);
+        else
+            m.setSelected(true);
 
         HBox hbox = new HBox(10, settingLabel, s, m, b);
         hbox.setAlignment(Pos.CENTER);
@@ -150,6 +169,7 @@ public class Menu {
         Button exit = createButtonWithIcon("/exit.png");
         Button pause = createButtonWithIcon("/pause.png");
         Button restart = createButtonWithIcon("/restart.png");
+        //Button backToMenu = createButtonWithIcon("/back.png");
 
         exit.setOnAction(event -> menuListener.setExit());
 
@@ -163,9 +183,11 @@ public class Menu {
 
         restart.setOnAction(event -> menuListener.setRestart());
 
+        //backToMenu.setOnAction(event -> menuListener.setBackToMenu());
+
         HBox leftButtons = new HBox(10, rate, info, settings);
         leftButtons.setAlignment(Pos.TOP_LEFT);
-        HBox rightButtons = new HBox(10,pause,restart,exit);
+        HBox rightButtons = new HBox(10,pause,restart, exit);
         rightButtons.setAlignment(Pos.TOP_RIGHT);
 
         Pane filler = new Pane();

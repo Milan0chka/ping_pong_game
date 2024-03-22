@@ -1,8 +1,11 @@
 package com.example.ping_pong.controller;
 
 import com.example.ping_pong.model.Game;
+import com.example.ping_pong.model.GameSettings;
 import com.example.ping_pong.model.Player;
 import com.example.ping_pong.view.LabCanvas;
+
+import java.io.IOException;
 
 public class LabController {
     private Game game;
@@ -53,6 +56,14 @@ public class LabController {
         canvas.drawGoal(player);
 
         game.resetGame();
+    }
+
+    public boolean isGameOn() {
+        return isGameOn;
+    }
+
+    public void setGameOn(boolean gameOn) {
+        isGameOn = gameOn;
     }
 
     public Game getGame() {

@@ -31,7 +31,7 @@ public class BallManager implements Runnable{
             }
 
             if (! game.isPaused()){
-                ball.move(game.getHeigh(), game.getWidth());
+                ball.move();
 
                 checkVerticalCollision();
                 checkRacketCollision();
@@ -58,7 +58,7 @@ public class BallManager implements Runnable{
         double futurePosY = game.getBall().getPositionY() + game.getBall().getDirectionY() * game.getBall().getSpeed();
         double radius = game.getBall().getRadius();
 
-        return futurePosY < radius || futurePosY > game.getHeigh() - radius;
+        return futurePosY < radius + 10 || futurePosY >= game.getHeigh() - radius;
     }
 
     public void checkRacketCollision(){

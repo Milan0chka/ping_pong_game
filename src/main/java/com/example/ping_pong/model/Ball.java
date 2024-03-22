@@ -10,6 +10,7 @@ public class Ball extends GameObject implements Resizable{
     private int directionY;
     private int directionX;
     private boolean pause;
+    private int bounceCount;
 
     public Ball(){
         super(325,275);
@@ -20,18 +21,29 @@ public class Ball extends GameObject implements Resizable{
         //direction of ball`s movement decides randomly
         this.directionX = random() >= 0.5 ? 1: -1;
         this.directionY = random() >= 0.5 ? 1: -1;
+        this.bounceCount = 0;
     }
-    public void move(double height, double width) {
-        this.setPositionX(this.getPositionX() + directionX * speed);
-        this.setPositionY(this.getPositionY() + directionY * speed);
+    public void move() {
+        this.setPositionX(this.getPositionX() + directionX * (speed + bounceCount * speedChangeRate * 0.01));
+        this.setPositionY(this.getPositionY() + directionY * (speed + bounceCount * speedChangeRate * 0.01));
     }
 
     public void bounceY(){
         this.directionY *= -1;
+        this.bounceCount++;
     }
 
     public void bounceX(){
         this.directionX *= -1;
+        this.bounceCount++;
+    }
+
+    public int getBounceCount() {
+        return bounceCount;
+    }
+
+    public void setBounceCount(int bounceCount) {
+        this.bounceCount = bounceCount;
     }
 
     public boolean isPause(){

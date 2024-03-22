@@ -7,6 +7,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -146,6 +148,8 @@ public class Menu {
         Button settings = createButtonWithIcon("/settings.png");
         Button info = createButtonWithIcon("/info.png");
         Button exit = createButtonWithIcon("/exit.png");
+        Button pause = createButtonWithIcon("/pause.png");
+        Button restart = createButtonWithIcon("/restart.png");
 
         exit.setOnAction(event -> menuListener.setExit());
 
@@ -155,8 +159,20 @@ public class Menu {
 
         settings.setOnAction(event -> menuListener.toggleSettingMenu(settingMenu));
 
-        gameMenu = new HBox(10, rate, info, settings, exit);
-        gameMenu.setAlignment(Pos.TOP_RIGHT);
+        pause.setOnAction(event -> menuListener.setPause(settingMenu.isVisible()));
+
+        restart.setOnAction(event -> menuListener.setRestart());
+
+        HBox leftButtons = new HBox(10, rate, info, settings);
+        leftButtons.setAlignment(Pos.TOP_LEFT);
+        HBox rightButtons = new HBox(10,pause,restart,exit);
+        rightButtons.setAlignment(Pos.TOP_RIGHT);
+
+        Pane filler = new Pane();
+        HBox.setHgrow(filler, Priority.ALWAYS);
+
+        gameMenu = new HBox(leftButtons,filler, rightButtons);
+        gameMenu.setAlignment(Pos.TOP_CENTER);
         gameMenu.setPadding(new Insets(10, 10, 10, 10));
         gameMenu.getStylesheets().add("stylesheet.css");
     }

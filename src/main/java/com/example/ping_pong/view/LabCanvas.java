@@ -123,15 +123,26 @@ public class LabCanvas extends Canvas {
 
         drawText(gc, 10, "GOAL!", player.getColor(),3, 0.4, 0.5);
 
-        drawPressEnter();
     }
 
     public void drawPressEnter() {
         GraphicsContext gc = super.getGraphicsContext2D();
-        String message = "Press Enter to start round";
+        String message = "Press Enter to start new round";
 
         drawText(gc,30, message, Color.GRAY, 1, 0.8, 0.5);
     }
 
+    public void drawGameFinishInfo(){
+        GraphicsContext gc = super.getGraphicsContext2D();
+        String message = "Nice game! Press Restart button or Enter to play again";
 
+        drawText(gc,30, message,Color.GRAY, 1, 0.8, 0.5);
+    }
+
+    public void drawWinner(Player winner){
+        GraphicsContext gc = super.getGraphicsContext2D();
+        String message = winner.getName() + " won!";
+
+        drawText(gc, 10, message, winner.getColor(), 3, 0.4, 0.5);
+    }
 }

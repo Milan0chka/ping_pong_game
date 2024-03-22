@@ -6,7 +6,6 @@ import com.example.ping_pong.view.Menu;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -16,8 +15,8 @@ import java.io.IOException;
 public class HelloApplication extends Application implements SceneSwitcher {
 
     private LabCanvas canvas = new LabCanvas(650, 500);
-    private LabController labController = new LabController();
-    private MenuListener menuListener = new MenuListener(labController.getGame(), this);
+    private LabController labController = new LabController(canvas);
+    private MenuListener menuListener = new MenuListener(labController.getGame(), this, labController);
     private Menu menu = new Menu(menuListener);
     private StackPane rootPane;
 
@@ -83,7 +82,7 @@ public class HelloApplication extends Application implements SceneSwitcher {
         canvas.drawGame(labController.getGame());
 
         HBox gameMenu = menu.getGameMenu();
-        StackPane.setAlignment(gameMenu, Pos.TOP_RIGHT);
+        StackPane.setAlignment(gameMenu, Pos.TOP_CENTER);
         rootPane.getChildren().add(gameMenu);
 
         VBox settingOverlay = menu.getSettingMenu();
@@ -91,12 +90,12 @@ public class HelloApplication extends Application implements SceneSwitcher {
         StackPane.setAlignment(settingOverlay, Pos.CENTER);
         rootPane.getChildren().add(settingOverlay);
 
-        KeyboardListener keyboardListener = new KeyboardListener( labController.getGame());
+        KeyboardListener keyboardListener = new KeyboardListener( labController.getGame(), labController);
         canvas.setOnKeyPressed(keyboardListener );
         canvas.setOnKeyTyped(keyboardListener);
         canvas.setFocusTraversable(true);
 
-        BallManager ballManager = new BallManager(labController.getGame(), canvas);
+        BallManager ballManager = new BallManager(labController.getGame(), canvas, labController);
         Thread thread = new Thread(ballManager);
         thread.start();
         Thread.yield();

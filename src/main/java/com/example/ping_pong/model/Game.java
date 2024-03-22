@@ -11,6 +11,7 @@ public class Game implements Resizable{
     private int scoreLimit;
     private double width;
     private double heigh;
+    private boolean isPaused;
 
     public Game() {
         this.width = 650;
@@ -19,6 +20,7 @@ public class Game implements Resizable{
         this.player2 = new Player(Color.RED, 620);
         this.ball = new Ball();
         this.scoreLimit = 10;
+        this.isPaused = true;
     }
 
     public void resetGame(){
@@ -26,13 +28,26 @@ public class Game implements Resizable{
         player2.getRacket().setPositionY(getHeigh()/2 - player1.getRacket().getWidth()/2);
         ball.setPositionY(getHeigh()/2);
         ball.setPositionX(getWidth()/2);
-        ball.setPause(true);
         ball.setDirectionX(-ball.getDirectionX());
+        this.isPaused = true;
     }
 
     public void startGame() throws InterruptedException {
-        ball.setPause(false);
+        this.isPaused = false;
         TimeUnit.MILLISECONDS.sleep(30);
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void resetScore(){
+        player1.setScore(0);
+        player2.setScore(0);
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
     }
 
     public Player getPlayer1() {

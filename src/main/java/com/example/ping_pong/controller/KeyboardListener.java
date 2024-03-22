@@ -8,8 +8,10 @@ import javafx.scene.input.KeyEvent;
 
 public class KeyboardListener implements EventHandler<KeyEvent> {
         private Game game;
-        public KeyboardListener(Game game2) {
+        private LabController gameController;
+        public KeyboardListener(Game game2, LabController gameController) {
             this.game = game2;
+            this.gameController = gameController;
         }
         @Override
         public void handle(KeyEvent keyEvent) {
@@ -23,7 +25,7 @@ public class KeyboardListener implements EventHandler<KeyEvent> {
                 case DOWN -> game.getPlayer2().getRacket().moveDown(height);
                 case ENTER -> {
                     try {
-                        game.startGame();
+                        gameController.startGame();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }

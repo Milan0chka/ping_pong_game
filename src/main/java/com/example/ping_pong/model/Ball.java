@@ -22,46 +22,17 @@ public class Ball extends GameObject implements Resizable{
         this.directionY = random() >= 0.5 ? 1: -1;
     }
     public void move(double height, double width) {
-        if (!pause){
-
-            checkVerticalCollision(height);
-
-            // Update the position based on the current position, direction, and speed
-            this.setPositionX(this.getPositionX() + directionX * speed);
-            this.setPositionY(this.getPositionY() + directionY * speed);
-        }
+        this.setPositionX(this.getPositionX() + directionX * speed);
+        this.setPositionY(this.getPositionY() + directionY * speed);
     }
 
-    private void checkVerticalCollision(double height) {
-        double futurePosY = this.getPositionY() + directionY * speed;
-
-        if (futurePosY - radius < 0 || futurePosY + radius > height)
-            directionY *= -1; // Reverse direction on collision
+    public void bounceY(){
+        this.directionY *= -1;
     }
 
-    public void bounceFromRacket(Racket racket1, Racket racket2) {
-        Racket activeRacket = this.getDirectionX() == -1 ? racket1 : racket2;
-
-        double racketLeft = activeRacket.getPositionX();
-        double racketRight = racketLeft + activeRacket.getThickness();
-        double racketTop = activeRacket.getPositionY();
-        double racketBottom = racketTop + activeRacket.getWidth();
-
-        double ballLeft = this.getPositionX() - this.getRadius();
-        double ballRight = this.getPositionX() + this.getRadius();
-        double ballTop = this.getPositionY() - this.getRadius();
-        double ballBottom = this.getPositionY() + this.getRadius();
-
-        // Check collision based on ball direction
-        boolean collision = this.getDirectionX() == -1 ?
-                (ballLeft < racketRight && ballBottom > racketTop && ballTop < racketBottom) :
-                (ballRight > racketLeft + 15 && ballBottom > racketTop && ballTop < racketBottom);
-
-        if (collision) {
-            this.setDirectionX(-this.getDirectionX());
-        }
+    public void bounceX(){
+        this.directionX *= -1;
     }
-
 
     public boolean isPause(){
         return this.pause;

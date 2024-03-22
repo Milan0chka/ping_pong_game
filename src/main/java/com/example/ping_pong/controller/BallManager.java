@@ -9,9 +9,15 @@ import com.example.ping_pong.view.LabCanvas;
 public class BallManager implements Runnable{
     private Game game;
     private LabCanvas canvas;
-    public BallManager(Game c, LabCanvas canvas) {
+    private LabController gameController;
+
+    private boolean isGameOn;
+
+    public BallManager(Game c, LabCanvas canvas, LabController gameController) {
         this.game=c;
         this.canvas=canvas;
+        this.gameController = gameController;
+        isGameOn = true;
     }
     @Override
     public void run() {
@@ -24,39 +30,100 @@ public class BallManager implements Runnable{
                 throw new RuntimeException(e);
             }
 
-            ball.move(game.getHeigh(), game.getWidth());
-            ball.bounceFromRacket(game.getPlayer1().getRacket(), game.getPlayer2().getRacket());
+            if (! game.isPaused()){
+                ball.move(game.getHeigh(), game.getWidth());
 
-            checkGoal(ball);
+                checkVerticalCollision();
+                checkRacketCollision();
 
-            canvas.drawGame(game);
-            if (ball.isPause())
-                canvas.drawPressEnter();
+                if (checkGoal(ball)){
+                    if (isGameEnded())
+                        endOfGame();
+                    else
+                        notifyAboutGoal();
+                    continue;
+                }
+
+                canvas.drawGame(game);
+            }
         }
     }
 
-    private void checkGoal(Ball ball){
-        Player playerScored;
+    public void checkVerticalCollision(){
+        if(isVerticalCollision())
+            game.getBall().bounceY();
+    }
 
-        if (ball.getPositionX() < ball.getRadius()){
-            game.getPlayer2().setScore(game.getPlayer2().getScore()+1);
-            playerScored = game.getPlayer2();
+    public boolean isVerticalCollision(){
+        double futurePosY = game.getBall().getPositionY() + game.getBall().getDirectionY() * game.getBall().getSpeed();
+        double radius = game.getBall().getRadius();
+
+        return futurePosY < radius || futurePosY > game.getHeigh() - radius;
+    }
+
+    public void checkRacketCollision(){
+        Racket activeRacket = game.getBall().getDirectionX() == -1 ? game.getPlayer1().getRacket() : game.getPlayer2().getRacket();
+        if ( isRacketCollision(activeRacket, game.getBall()))
+            game.getBall().bounceX();
+
+    }
+
+    public boolean isRacketCollision(Racket racket, Ball ball){
+        double racketLeft = racket.getPositionX();
+        double racketRight = racketLeft + racket.getThickness();
+        double racketTop = racket.getPositionY();
+        double racketBottom = racketTop + racket.getWidth();
+
+        double radius = ball.getRadius();
+        double ballLeft = ball.getPositionX() -radius;
+        double ballRight = ball.getPositionX() + radius;
+        double ballTop = ball.getPositionY() - radius;
+        double ballBottom = ball.getPositionY() + radius;
+
+        return ball.getDirectionX() == -1 ?
+                (ballLeft < racketRight && ballBottom > racketTop && ballTop < racketBottom) :
+                (ballRight > racketLeft + 10 && ballBottom > racketTop && ballTop < racketBottom);
+
+    }
+
+    private boolean checkGoal(Ball ball){
+        if (hasPlayer1Scored(ball)){
+            gameController.playerScored(game.getPlayer1());
         }
-        else if (ball.getPositionX() > game.getWidth() - ball.getRadius()){
-            game.getPlayer1().setScore(game.getPlayer1().getScore()+1);
-            playerScored = game.getPlayer1();
+        else if (hasPlayer2Scored(ball)){
+            gameController.playerScored(game.getPlayer2());
         }
         else
-            return;
+            return false;
 
-        game.resetGame();
-        canvas.drawGoal(playerScored);
+        return true;
+    }
+
+    public boolean hasPlayer2Scored(Ball ball) {
+        return ball.getPositionX() < ball.getRadius();
+    }
+
+    public boolean hasPlayer1Scored(Ball ball){
+        return ball.getPositionX() > game.getWidth() - ball.getRadius();
+    }
+
+    public void notifyAboutGoal(){
         try {
             Thread.sleep(2500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        canvas.drawGame(game);
+        canvas.drawPressEnter();
+    }
+    public boolean isGameEnded()
+    {
+        int maxScore = Math.max(game.getPlayer1().getScore(), game.getPlayer2().getScore());
+        return game.getScoreLimit()<=maxScore;
+    }
 
+    public void endOfGame(){
+        gameController.finishGame();
     }
 
 }

@@ -13,9 +13,12 @@ public class MenuListener {
     Game game;
     SceneSwitcher sceneSwitcher;
 
-    public MenuListener(Game game, SceneSwitcher sceneSwitcher){
+    LabController gameController;
+
+    public MenuListener(Game game, SceneSwitcher sceneSwitcher, LabController gameController){
         this.game = game;
         this.sceneSwitcher = sceneSwitcher;
+        this.gameController = gameController;
     }
 
     public void setExit() {
@@ -116,11 +119,20 @@ public class MenuListener {
 
     public void toggleSettingMenu(VBox settingMenu){
         if (settingMenu.isVisible())
-            game.getBall().setPause(false);
+            game.setPaused(false);
         else
-            game.getBall().setPause(true);
+            game.setPaused(true);
 
         settingMenu.setVisible(!settingMenu.isVisible());
+    }
+
+    public void setPause(boolean isSettingMenuOn){
+        if (! isSettingMenuOn)
+            game.setPaused(! game.isPaused());
+    }
+
+    public void setRestart(){
+        gameController.restartGame();
     }
 
     public Game getGame() {

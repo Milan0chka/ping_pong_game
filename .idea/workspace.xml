@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_TEST_SOURCES" value="false" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12778f95-678e-4176-8c20-ae1383eba7e5" name="Changes" comment="Version 1.5 (Game is fully functional, added ability to restart and pause)">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/GameSettingsSerializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/GameSettings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/back.png" afterDir="false" />
+    <list default="true" id="12778f95-678e-4176-8c20-ae1383eba7e5" name="Changes" comment="Version 1.6 (Saving of game settings added)">
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/setting.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/HelloApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/BallManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/BallManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/GameSettingsSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/GameSettingsSerializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/KeyboardListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/KeyboardListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/LabController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/LabController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/MenuListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/MenuListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/SceneSwitcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/controller/SceneSwitcher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Ball.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/GameObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/GameSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/GameSettings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Racket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Racket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Resizable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/model/Resizable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/view/LabCanvas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/view/LabCanvas.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/view/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/ping_pong/view/Menu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -111,7 +122,7 @@
       <workItem from="1710166664126" duration="1815000" />
       <workItem from="1710265483468" duration="584000" />
       <workItem from="1710426237060" duration="539000" />
-      <workItem from="1710961034609" duration="44742000" />
+      <workItem from="1710961034609" duration="55430000" />
     </task>
     <task id="LOCAL-00001" summary="Version 1.0 (Game is not functional yet)">
       <created>1708716639684</created>
@@ -155,7 +166,14 @@
       <option name="project" value="LOCAL" />
       <updated>1711116680711</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Version 1.6 (Saving of game settings added)">
+      <created>1711145672645</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1711145672645</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -168,7 +186,8 @@
     <MESSAGE value="Version 1.3 (Rackets can move and better resizing)" />
     <MESSAGE value="Version 1.4 (Game function properly, but not all features implemented)" />
     <MESSAGE value="Version 1.5 (Game is fully functional, added ability to restart and pause)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Version 1.5 (Game is fully functional, added ability to restart and pause)" />
+    <MESSAGE value="Version 1.6 (Saving of game settings added)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Version 1.6 (Saving of game settings added)" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

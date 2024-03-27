@@ -10,13 +10,24 @@ import javafx.scene.paint.Color;
 
 import java.util.Optional;
 
+/**
+ * Listens for menu actions and handles corresponding events and adjusting game settings.
+ */
 public class MenuListener {
-    Game game;
-    GameSettings gameSettings;
-    SceneSwitcher sceneSwitcher;
-    LabController gameController;
+    private Game game;
+    private GameSettings gameSettings;
+    private SceneSwitcher sceneSwitcher;
+    private LabController gameController;
 
-    public MenuListener(Game game, SceneSwitcher sceneSwitcher, LabController gameController){
+    /**
+     * Constructs a new MenuListener with the specified Game, SceneSwitcher, and LabController.
+     * Initializes game settings, scene switcher, and game controller.
+     *
+     * @param game           the Game object representing the game state
+     * @param sceneSwitcher  the SceneSwitcher object for switching scenes
+     * @param gameController the LabController object for controlling the game
+     */
+    public MenuListener(Game game, SceneSwitcher sceneSwitcher, LabController gameController) {
         this.game = game;
         this.gameSettings = GameSettingsSerializer.deserialize();
         setInitialGameSettings();
@@ -24,28 +35,37 @@ public class MenuListener {
         this.gameController = gameController;
     }
 
-    public void setInitialGameSettings(){
+    /**
+     * Sets the initial game settings based on the deserialized GameSettings object.
+     */
+    public void setInitialGameSettings() {
         game.getPlayer1().setName(gameSettings.getPlayer1Name());
         game.getPlayer1().setColor(gameSettings.getPlayer1Color());
 
         game.getPlayer2().setName(gameSettings.getPlayer2Name());
         game.getPlayer2().setColor(gameSettings.getPlayer2Color());
 
-        this.setRacketThickness(gameSettings.getRacketThickness());
-        this.setRacketWidth(gameSettings.getRacketWidth());
+        setRacketThickness(gameSettings.getRacketThickness());
+        setRacketWidth(gameSettings.getRacketWidth());
 
         game.getBall().setSpeed(gameSettings.getBallSpeed());
         game.getBall().setSpeedChangeRate(gameSettings.getSpeedChangeRate());
 
         game.setScoreLimit(gameSettings.getScoreLimit());
-
     }
 
+    /**
+     * Exits the game and serializes the current game settings.
+     */
     public void setExit() {
         System.out.println("EXIT");
         GameSettingsSerializer.serialize(gameSettings);
         Platform.exit();
     }
+
+    /**
+     * Displays information about the game.
+     */
     public void setAbout() {
         System.out.println("ABOUT ");
         var alert = new Alert(Alert.AlertType.INFORMATION);
@@ -57,6 +77,9 @@ public class MenuListener {
         });
     }
 
+    /**
+     * Prompts the user to rate the game.
+     */
     public void setRate() {
         System.out.println("RATE");
 
@@ -81,12 +104,20 @@ public class MenuListener {
         });
     }
 
+    /**
+     * Displays an alert dialog with the specified type, title, and content text.
+     *
+     * @param alertType   the type of the alert dialog
+     * @param title       the title of the alert dialog
+     * @param contentText the content text of the alert dialog
+     */
     private void showAlert(Alert.AlertType alertType, String title, String contentText) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setContentText(contentText);
         alert.showAndWait();
     }
+
 
     public void setPlayer1Name(String playerName) {
         game.getPlayer1().setName(playerName);
@@ -98,12 +129,12 @@ public class MenuListener {
         gameSettings.setPlayer2Name(playerName);
     }
 
-    public void setColor1(Color color){
+    public void setColor1(Color color) {
         game.getPlayer1().setColor(color);
         gameSettings.setPlayer1Color(color);
     }
 
-    public void setColor2(Color color){
+    public void setColor2(Color color) {
         game.getPlayer2().setColor(color);
         gameSettings.setPlayer2Color(color);
     }
@@ -114,21 +145,32 @@ public class MenuListener {
         gameSettings.setBallSpeed(ballSpeed);
     }
 
+    /**
+     * Sets the width of the rackets in a percents of a screen height for both players.
+     *
+     * @param racketWidth the width of the rackets to be set
+     */
     public void setRacketWidth(int racketWidth) {
-        game.getPlayer1().getRacket().setWidth(game.getHeigh()/100*racketWidth);
-        game.getPlayer2().getRacket().setWidth(game.getHeigh()/100*racketWidth);
+        game.getPlayer1().getRacket().setWidth(game.getHeigh() / 100 * racketWidth);
+        game.getPlayer2().getRacket().setWidth(game.getHeigh() / 100 * racketWidth);
         gameSettings.setRacketWidth(racketWidth);
     }
 
+    /**
+     * Sets the thickness of the rackets in a percents of a screen width for both players.
+     *
+     * @param racketThickness the thickness of the rackets to be set
+     */
     public void setRacketThickness(int racketThickness) {
-        game.getPlayer1().getRacket().setThickness(game.getWidth()/100*racketThickness);
+        game.getPlayer1().getRacket().setThickness(game.getWidth() / 100 * racketThickness);
 
-        double difference = game.getPlayer2().getRacket().getThickness() - game.getWidth()/100*racketThickness;
-        game.getPlayer2().getRacket().setThickness(game.getWidth()/100*racketThickness);
+        double difference = game.getPlayer2().getRacket().getThickness() - game.getWidth() / 100 * racketThickness;
+        game.getPlayer2().getRacket().setThickness(game.getWidth() / 100 * racketThickness);
         game.getPlayer2().getRacket().setPositionX(game.getPlayer2().getRacket().getPositionX() + difference);
 
         gameSettings.setRacketThickness(racketThickness);
     }
+
 
     public void setSpeedChangeRate(int speedChangeRate) {
         game.getBall().setSpeedChangeRate(speedChangeRate);
@@ -136,11 +178,14 @@ public class MenuListener {
     }
 
     public void setScoreLimit(int scoreLimit) {
-       game.setScoreLimit(scoreLimit);
-       gameSettings.setScoreLimit(scoreLimit);
+        game.setScoreLimit(scoreLimit);
+        gameSettings.setScoreLimit(scoreLimit);
     }
 
-    public void setPlay(){
+    /**
+     * Sets up the game and switches to the game scene. If player names are empty, defaults to "Player 1" and "Player 2".
+     */
+    public void setPlay() {
         if (game.getPlayer1().getName().isEmpty()) {
             game.getPlayer1().setName("Player 1");
         }
@@ -150,30 +195,48 @@ public class MenuListener {
         sceneSwitcher.switchToGame();
     }
 
-    public void toggleSettingMenu(VBox settingMenu){
-
+    /**
+     * Toggles the visibility of the settings menu and adjusts game pause state accordingly.
+     *
+     * @param settingMenu the VBox containing the settings menu
+     */
+    public void toggleSettingMenu(VBox settingMenu) {
         if (settingMenu.isVisible())
             game.setPaused(false);
         else
             game.setPaused(true);
 
+        if (!gameController.isGameOn())
+            game.setPaused(true);
+
         settingMenu.setVisible(!settingMenu.isVisible());
     }
 
-    public void setPause(boolean isSettingMenuOn){
-        if (! isSettingMenuOn)
-            game.setPaused(! game.isPaused());
+    /**
+     * Pauses or resumes the game based on the state of the settings menu and game status.
+     *
+     * @param isSettingMenuOn true if the settings menu is currently visible, false otherwise
+     */
+    public void setPause(boolean isSettingMenuOn) {
+        if (!isSettingMenuOn)
+            game.setPaused(!game.isPaused());
+
+        if (!gameController.isGameOn())
+            game.setPaused(true);
     }
 
-    public void setRestart(){
+    public void setRestart() {
         gameController.restartGame();
     }
 
-    public void setBackToMenu(){
+    /**
+     * Restarts the game and switches back to the main menu.
+     */
+    public void setBackToMenu() {
         gameController.restartGame();
-        gameController.setGameOn(false);
         sceneSwitcher.switchToMainMenu();
     }
+
 
     public GameSettings getGameSettings() {
         return gameSettings;

@@ -10,10 +10,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 import java.util.Objects;
 
+/**
+ * Represents the menu controls and layouts for the game settings.
+ */
 public class Menu {
     private VBox mainMenu;
     private VBox settingMenu;
@@ -24,6 +26,10 @@ public class Menu {
     private ColorPicker colorPicker1, colorPicker2;
     private MenuListener menuListener;
 
+    /**
+     * Constructs a Menu object with the provided MenuListener.
+     * @param menuListener The listener for menu events.
+     */
     public Menu(MenuListener menuListener) {
         this.menuListener = menuListener;
         initializeFields();
@@ -35,6 +41,9 @@ public class Menu {
         handleSettingAction();
     }
 
+    /**
+     * Initializes the menu fields based on earlier deserialized settings.
+     */
     private void initializeFields() {
         if (Objects.equals(menuListener.getGameSettings().getPlayer1Name(), "Player 1")
                 && Objects.equals(menuListener.getGameSettings().getPlayer2Name(), "Player 2")){
@@ -55,6 +64,9 @@ public class Menu {
 
     }
 
+    /**
+     * Creates the settings menu layout.
+     */
     private void createSettingMenu() {
         Label settingsLabel = createStyledLabel("GAME SETTINGS", "settings-label");
         VBox settingsBox = createSettingsBox();
@@ -65,6 +77,10 @@ public class Menu {
         settingMenu.setMaxHeight(450);
     }
 
+    /**
+     * Creates the settings controls box.
+     * @return The VBox containing the settings controls.
+     */
     private VBox createSettingsBox() {
         int selectedWidth = menuListener.getGameSettings().getRacketWidth();
         int selectedThickness = menuListener.getGameSettings().getRacketThickness();
@@ -77,6 +93,12 @@ public class Menu {
                 createSettingControl("SCORE LIMIT:", scoreLimit));
     }
 
+    /**
+     * Creates a setting control with a label and a node.
+     * @param label The label for the control.
+     * @param control The node representing the control.
+     * @return The HBox containing the setting control.
+     */
     private HBox createSettingControl(String label, javafx.scene.Node control) {
         Label settingLabel = new Label(label);
         HBox hbox = new HBox(10, settingLabel, control);
@@ -84,6 +106,19 @@ public class Menu {
         return hbox;
     }
 
+    /**
+     * Creates a toggle group setting control.
+     * @param label The label for the control.
+     * @param group The toggle group for the control.
+     * @param n1 The label for the first option.
+     * @param n1v The value for the first option.
+     * @param n2 The label for the second option.
+     * @param n2v The value for the second option.
+     * @param n3 The label for the third option.
+     * @param n3v The value for the third option.
+     * @param selectedValue The selected value for the toggle group from saved settings.
+     * @return The HBox containing the toggle group setting control.
+     */
     private HBox createToggleGroup(String label, ToggleGroup group,
                                    String n1, int n1v,
                                    String n2, int n2v,
@@ -115,6 +150,10 @@ public class Menu {
         return hbox;
     }
 
+    /**
+     * Creates the PLAY button.
+     * @return The created play button.
+     */
     private Button createPlayButton() {
         Button button = new Button("PLAY");
         button.getStyleClass().add("start-game-button");
@@ -124,18 +163,32 @@ public class Menu {
         return button;
     }
 
+    /**
+     * Creates a label with the specified text and style class.
+     * @param text The text of the label.
+     * @param styleClass The CSS style class for the label.
+     * @return The created label.
+     */
     private Label createStyledLabel(String text, String styleClass) {
         Label label = new Label(text);
         label.getStyleClass().add(styleClass);
         return label;
     }
 
+    /**
+     * Applies the specified style class to the VBox and aligns it to the center.
+     * @param vbox The VBox to style.
+     * @param styleClass The CSS style class to apply.
+     */
     private void styleVBox(VBox vbox, String styleClass) {
         vbox.getStyleClass().add(styleClass);
         vbox.setAlignment(Pos.CENTER);
         vbox.getStylesheets().add("stylesheet.css");
     }
 
+    /**
+     * Creates the main menu components including the title, player input boxes, setting menu, and play button.
+     */
     private void createMainMenu() {
         Label titleLabel = createStyledLabel("PING-PONG", "title-label");
         HBox playerBox = createPlayerBox();
@@ -146,6 +199,10 @@ public class Menu {
         styleVBox(mainMenu, "main-vbox");
     }
 
+    /**
+     * Creates a box containing player input elements.
+     * @return The created player input box.
+     */
     private HBox createPlayerBox() {
         HBox hbox = new HBox(10,
                 createPlayerInput("PLAYER 1", player1Name, colorPicker1),
@@ -154,6 +211,13 @@ public class Menu {
         return hbox;
     }
 
+    /**
+     * Creates a VBox containing player input elements.
+     * @param label The label text for the player input.
+     * @param textField The text field for entering player information.
+     * @param colorPicker The color picker for selecting player color.
+     * @return The created player input VBox.
+     */
     private VBox createPlayerInput(String label, TextField textField, ColorPicker colorPicker) {
         Label playerLabel = new Label(label);
         textField.getStyleClass().add("player-text-field");
@@ -162,6 +226,9 @@ public class Menu {
         return box;
     }
 
+    /**
+     * Creates the game menu components including buttons for actions such as rating, settings, info, etc.
+     */
     private void createGameMenu() {
         Button rate = createButtonWithIcon("/star.png");
         Button settings = createButtonWithIcon("/settings.png");
@@ -169,36 +236,34 @@ public class Menu {
         Button exit = createButtonWithIcon("/exit.png");
         Button pause = createButtonWithIcon("/pause.png");
         Button restart = createButtonWithIcon("/restart.png");
-        //Button backToMenu = createButtonWithIcon("/back.png");
+        Button backToMenu = createButtonWithIcon("/back.png");
 
         exit.setOnAction(event -> menuListener.setExit());
-
         info.setOnAction(event -> menuListener.setAbout());
-
         rate.setOnAction(event -> menuListener.setRate());
-
         settings.setOnAction(event -> menuListener.toggleSettingMenu(settingMenu));
-
         pause.setOnAction(event -> menuListener.setPause(settingMenu.isVisible()));
-
         restart.setOnAction(event -> menuListener.setRestart());
-
-        //backToMenu.setOnAction(event -> menuListener.setBackToMenu());
+        backToMenu.setOnAction(event -> menuListener.setBackToMenu());
 
         HBox leftButtons = new HBox(10, rate, info, settings);
         leftButtons.setAlignment(Pos.TOP_LEFT);
-        HBox rightButtons = new HBox(10,pause,restart, exit);
+        HBox rightButtons = new HBox(10, pause, restart, backToMenu, exit);
         rightButtons.setAlignment(Pos.TOP_RIGHT);
 
         Pane filler = new Pane();
         HBox.setHgrow(filler, Priority.ALWAYS);
 
-        gameMenu = new HBox(leftButtons,filler, rightButtons);
+        gameMenu = new HBox(leftButtons, filler, rightButtons);
         gameMenu.setAlignment(Pos.TOP_CENTER);
         gameMenu.setPadding(new Insets(10, 10, 10, 10));
         gameMenu.getStylesheets().add("stylesheet.css");
     }
-
+    /**
+     * Creates a button with an icon loaded from the specified path.
+     * @param pathName The path to the icon image.
+     * @return The created button with the icon.
+     */
     private Button createButtonWithIcon(String pathName) {
         Image image = new Image(pathName);
         ImageView imageView = new ImageView(image);
@@ -214,6 +279,9 @@ public class Menu {
         return buttonWithIcon;
     }
 
+    /**
+     * Handles actions for various setting inputs such as player names, colors, ball speed, etc.
+     */
     public void handleSettingAction() {
         player1Name.textProperty().addListener((observable, oldValue, newValue) -> menuListener.setPlayer1Name(newValue));
         player2Name.textProperty().addListener((observable, oldValue, newValue) -> menuListener.setPlayer2Name(newValue));
@@ -247,6 +315,18 @@ public class Menu {
             }
         });
     }
+
+    /**
+     * Resets the main menu by removing existing components and adding the setting menu and play button.
+     */
+    public void resetMainMenu(){
+        mainMenu.getChildren().remove(2);
+        mainMenu.getChildren().add(settingMenu);
+        mainMenu.getChildren().add(createPlayButton());
+
+        settingMenu.setVisible(true);
+    }
+
 
     public VBox getMainMenu() {
         return mainMenu;

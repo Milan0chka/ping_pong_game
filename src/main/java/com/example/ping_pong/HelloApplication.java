@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * The main class of the Ping-Pong game application.
+ */
 public class HelloApplication extends Application implements SceneSwitcher {
 
     private LabCanvas canvas = new LabCanvas(650, 500);
@@ -19,7 +22,15 @@ public class HelloApplication extends Application implements SceneSwitcher {
     private MenuListener menuListener = new MenuListener(labController.getGame(), this, labController);
     private Menu menu = new Menu(menuListener);
     private StackPane rootPane;
+    private Thread gameThread;
 
+    /**
+     * The main entry point for the JavaFX application.
+     * Initializes the stage and sets up the main scene.
+     *
+     * @param primaryStage The primary stage of the application.
+     * @throws IOException If an I/O error occurs.
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.rootPane = new StackPane();
@@ -41,11 +52,21 @@ public class HelloApplication extends Application implements SceneSwitcher {
         primaryStage.show();
     }
 
+    /**
+     * Initializes the window resize listeners.
+     *
+     * @param primaryStage The primary stage of the application.
+     */
     private void initializeResizeListeners(Stage primaryStage) {
         addWidthListener(primaryStage);
         addHeightListener(primaryStage);
     }
 
+    /**
+     * Adds a listener to handle changes in the width of the primaryStage.
+     *
+     * @param primaryStage The primary stage of the application.
+     */
     private void addWidthListener(Stage primaryStage) {
         primaryStage.widthProperty().addListener(observable -> {
             double factor = primaryStage.getWidth() / labController.getGame().getWidth();
@@ -56,6 +77,11 @@ public class HelloApplication extends Application implements SceneSwitcher {
         });
     }
 
+    /**
+     * Adds a listener to handle changes in the height of the primaryStage.
+     *
+     * @param primaryStage The primary stage of the application.
+     */
     private void addHeightListener(Stage primaryStage) {
         primaryStage.heightProperty().addListener(observable -> {
             double factor = primaryStage.getHeight() / labController.getGame().getHeigh();
@@ -66,13 +92,28 @@ public class HelloApplication extends Application implements SceneSwitcher {
         });
     }
 
+    /**
+     * Switches the scene to the main menu.
+     */
     @Override
     public void switchToMainMenu() {
         rootPane.getChildren().clear();
         VBox root = menu.getMainMenu();
+
+        if (!root.getChildren().contains(menu.getSettingMenu()))
+            menu.resetMainMenu();
+
+        if (gameThread != null) {
+            gameThread.interrupt();
+            gameThread = null;
+        }
+
         rootPane.getChildren().add(root);
     }
 
+    /**
+     * Switches the scene to the game.
+     */
     @Override
     public void switchToGame() {
         rootPane.getChildren().clear();
@@ -90,15 +131,14 @@ public class HelloApplication extends Application implements SceneSwitcher {
         StackPane.setAlignment(settingOverlay, Pos.CENTER);
         rootPane.getChildren().add(settingOverlay);
 
-        KeyboardListener keyboardListener = new KeyboardListener( labController.getGame(), labController);
-        canvas.setOnKeyPressed(keyboardListener );
+        KeyboardListener keyboardListener = new KeyboardListener(labController.getGame(), labController);
+        canvas.setOnKeyPressed(keyboardListener);
         canvas.setOnKeyTyped(keyboardListener);
         canvas.setFocusTraversable(true);
 
         BallManager ballManager = new BallManager(labController.getGame(), canvas, labController);
-        Thread thread = new Thread(ballManager);
-        thread.start();
-        Thread.yield();
+        gameThread = new Thread(ballManager);
+        gameThread.start();
     }
 
     public LabCanvas getCanvas() {

@@ -4,12 +4,21 @@ import javafx.scene.paint.Color;
 
 import java.io.Serializable;
 
+/**
+ * Represents the settings for a game.
+ */
 public class GameSettings implements Serializable {
     private String player1Name;
     private transient Color player1Color;
+    /**
+     * Variable to serialize Color.
+     */
     private long player1ColorValue;
     private String player2Name;
     private transient Color player2Color;
+    /**
+     * Variable to serialize Color.
+     */
     private long player2ColorValue;
     private int scoreLimit;
     private int ballSpeed;
@@ -17,6 +26,9 @@ public class GameSettings implements Serializable {
     private int racketWidth;
     private int racketThickness;
 
+    /**
+     * Constructs a GameSettings object with default settings.
+     */
     public GameSettings() {
         this.player1Name = "Player 1";
         this.player1Color = Color.BLUE;
@@ -24,7 +36,7 @@ public class GameSettings implements Serializable {
         this.player2Color = Color.RED;
         this.scoreLimit = 10;
         this.ballSpeed = 10;
-        this.speedChangeRate = 10;
+        this.speedChangeRate = 25;
         this.racketWidth = 20;
         this.racketThickness = 3;
     }
@@ -62,7 +74,6 @@ public class GameSettings implements Serializable {
         this.player2ColorValue = (long) (player2Color.getRed() * 255) << 16 | (long) (player2Color.getGreen() * 255) << 8 | (long) (player2Color.getBlue() * 255);
     }
 
-    // Add a method to get the Color from the RGB value
     public Color getPlayer2Color() {
         if (player2Color == null) {
             player2Color = Color.rgb((int)((player2ColorValue >> 16) & 0xFF), (int)((player2ColorValue >> 8) & 0xFF), (int)(player2ColorValue & 0xFF));

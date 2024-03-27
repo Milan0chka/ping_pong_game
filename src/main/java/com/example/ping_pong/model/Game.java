@@ -2,10 +2,11 @@ package com.example.ping_pong.model;
 
 import javafx.scene.paint.Color;
 
-import java.io.Serializable;
-import java.util.concurrent.TimeUnit;
-
+/**
+ * Represents the game state and logic for a ping pong game.
+ */
 public class Game implements Resizable{
+
     private Player player1;
     private Player player2;
     private Ball ball;
@@ -14,6 +15,9 @@ public class Game implements Resizable{
     private double heigh;
     private boolean isPaused;
 
+    /**
+     * Constructs a new Game object with default settings.
+     */
     public Game() {
         this.width = 650;
         this.heigh = 550;
@@ -24,29 +28,14 @@ public class Game implements Resizable{
         this.isPaused = true;
     }
 
-    public void resetGame(){
-        player1.getRacket().setPositionY(getHeigh()/2 - player1.getRacket().getWidth()/2);
-        player2.getRacket().setPositionY(getHeigh()/2 - player1.getRacket().getWidth()/2);
-        ball.setPositionY(getHeigh()/2);
-        ball.setPositionX(getWidth()/2);
-        ball.setDirectionX(-ball.getDirectionX());
-        ball.setBounceCount(0);
-        this.isPaused = true;
-    }
-
-    public void startGame() throws InterruptedException {
-        this.isPaused = false;
-        TimeUnit.MILLISECONDS.sleep(30);
-    }
-
+    /**
+     * Checks if the game is paused.
+     * @return true if the game is paused, false otherwise.
+     */
     public boolean isPaused() {
         return isPaused;
     }
 
-    public void resetScore(){
-        player1.setScore(0);
-        player2.setScore(0);
-    }
 
     public void setPaused(boolean paused) {
         isPaused = paused;
@@ -84,6 +73,7 @@ public class Game implements Resizable{
         this.scoreLimit = scoreLimit;
     }
 
+
     public double getWidth() {
         return width;
     }
@@ -100,6 +90,10 @@ public class Game implements Resizable{
         this.heigh = heigh;
     }
 
+    /**
+     * Resizes the game objects along the X-axis.
+     * @param factor The factor by which to resize the game objects.
+     */
     @Override
     public void resizeX(double factor) {
         player1.getRacket().resizeX(factor);
@@ -107,6 +101,10 @@ public class Game implements Resizable{
         ball.resizeX(factor);
     }
 
+    /**
+     * Resizes the game objects along the Y-axis.
+     * @param factor The factor by which to resize the game objects.
+     */
     @Override
     public void resizeY(double factor) {
         player1.getRacket().resizeY(factor);

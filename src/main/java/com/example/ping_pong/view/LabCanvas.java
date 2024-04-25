@@ -42,6 +42,10 @@ public class LabCanvas extends Canvas {
         drawCenteredTitles(gc, game);
 
         drawBall(gc, game.getBall());
+
+        if(game.isPaused()){
+            drawPressEnter();
+        }
     }
     /**
      * Resets the size of the canvas to match the dimensions of the game.

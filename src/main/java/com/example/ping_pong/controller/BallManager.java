@@ -10,7 +10,7 @@ import com.example.ping_pong.view.LabCanvas;
 public class BallManager implements Runnable {
     private Game game;
     private LabCanvas canvas;
-    private LabController gameController;
+    private GameController gameController;
 
     /**
      * Constructs a new BallManager with the specified game, canvas, and game controller.
@@ -19,7 +19,7 @@ public class BallManager implements Runnable {
      * @param canvas         the LabCanvas object for rendering the game
      * @param gameController the LabController object for controlling the game
      */
-    public BallManager(Game c, LabCanvas canvas, LabController gameController) {
+    public BallManager(Game c, LabCanvas canvas, GameController gameController) {
         this.game = c;
         this.canvas = canvas;
         this.gameController = gameController;
@@ -60,9 +60,9 @@ public class BallManager implements Runnable {
                     }
                     continue;
                 }
-
-                canvas.drawGame(game);
             }
+
+            canvas.drawGame(game);
 
             if (Thread.interrupted())
                 break;
@@ -166,7 +166,6 @@ public class BallManager implements Runnable {
      */
     public void notifyAboutGoal() {
         canvas.drawGame(game);
-        canvas.drawPressEnter();
     }
 
     /**

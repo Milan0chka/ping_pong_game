@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.util.Objects;
 
@@ -45,22 +46,17 @@ public class Menu {
      * Initializes the menu fields based on earlier deserialized settings.
      */
     private void initializeFields() {
-        if (Objects.equals(menuListener.getGameSettings().getPlayer1Name(), "Player 1")
-                && Objects.equals(menuListener.getGameSettings().getPlayer2Name(), "Player 2")){
-            player1Name = new TextField();
-            player2Name = new TextField();
-        } else {
-            player1Name = new TextField(menuListener.getGameSettings().getPlayer1Name());
-            player2Name = new TextField(menuListener.getGameSettings().getPlayer2Name());
-        }
+        player1Name = new TextField("Player 1");
+        player2Name = new TextField("Player 2");
+
+        colorPicker1 = new ColorPicker(Color.RED);
+        colorPicker2 = new ColorPicker(Color.BLUE);
 
         speedChangeRate = new TextField(String.valueOf( menuListener.getGameSettings().getSpeedChangeRate()));
         scoreLimit = new TextField(String.valueOf(menuListener.getGameSettings().getScoreLimit()));
         ballSpeed = new Slider(1, 20, menuListener.getGameSettings().getBallSpeed());
         racketWidth = new ToggleGroup();
         racketThickness = new ToggleGroup();
-        colorPicker1 = new ColorPicker(menuListener.getGameSettings().getPlayer1Color());
-        colorPicker2 = new ColorPicker(menuListener.getGameSettings().getPlayer2Color());
 
     }
 
@@ -154,11 +150,20 @@ public class Menu {
      * Creates the PLAY button.
      * @return The created play button.
      */
-    private Button createPlayButton() {
-        Button button = new Button("PLAY");
+    private Button createPlayButton(String temp) {
+        Button button = new Button(temp);
         button.getStyleClass().add("start-game-button");
 
         button.setOnAction(event -> menuListener.setPlay());
+
+        return button;
+    }
+
+    private Button createLoadSaveButton(){
+        Button button = new Button("LOAD SAVE");
+        button.getStyleClass().add("start-game-button");
+
+        button.setOnAction(event -> menuListener.setLoadSave());
 
         return button;
     }
@@ -192,9 +197,10 @@ public class Menu {
     private void createMainMenu() {
         Label titleLabel = createStyledLabel("PING-PONG", "title-label");
         HBox playerBox = createPlayerBox();
-        Button playButton = createPlayButton();
+        Button playButton = createPlayButton("PLAY");
+        Button loadSave = createLoadSaveButton();
 
-        mainMenu = new VBox(titleLabel, playerBox, settingMenu, playButton);
+        mainMenu = new VBox(titleLabel, playerBox, settingMenu,loadSave, playButton);
         mainMenu.setAlignment(Pos.CENTER);
         styleVBox(mainMenu, "main-vbox");
     }
@@ -237,6 +243,7 @@ public class Menu {
         Button pause = createButtonWithIcon("/pause.png");
         Button restart = createButtonWithIcon("/restart.png");
         Button backToMenu = createButtonWithIcon("/back.png");
+        Button saveGame = createButtonWithIcon("/save.png");
 
         exit.setOnAction(event -> menuListener.setExit());
         info.setOnAction(event -> menuListener.setAbout());
@@ -245,8 +252,9 @@ public class Menu {
         pause.setOnAction(event -> menuListener.setPause(settingMenu.isVisible()));
         restart.setOnAction(event -> menuListener.setRestart());
         backToMenu.setOnAction(event -> menuListener.setBackToMenu());
+        saveGame.setOnAction(actionEvent -> menuListener.setSaveGame());
 
-        HBox leftButtons = new HBox(10, rate, info, settings);
+        HBox leftButtons = new HBox(10, rate, info, settings, saveGame);
         leftButtons.setAlignment(Pos.TOP_LEFT);
         HBox rightButtons = new HBox(10, pause, restart, backToMenu, exit);
         rightButtons.setAlignment(Pos.TOP_RIGHT);
@@ -320,11 +328,18 @@ public class Menu {
      * Resets the main menu by removing existing components and adding the setting menu and play button.
      */
     public void resetMainMenu(){
+        mainMenu.getChildren().remove(3);
         mainMenu.getChildren().remove(2);
         mainMenu.getChildren().add(settingMenu);
-        mainMenu.getChildren().add(createPlayButton());
+        mainMenu.getChildren().add(createPlayButton("PLAY"));
+        mainMenu.getChildren().add(createLoadSaveButton());
 
         settingMenu.setVisible(true);
+
+        player1Name.setText(menuListener.getGame().getPlayer1().getName());
+        colorPicker1.setValue(menuListener.getGame().getPlayer1().getColor());
+        player2Name.setText(menuListener.getGame().getPlayer2().getName());
+        colorPicker2.setValue(menuListener.getGame().getPlayer2().getColor());
     }
 
 

@@ -1,14 +1,19 @@
 package com.example.ping_pong.controller;
 
 import com.example.ping_pong.model.Game;
+import com.example.ping_pong.model.GameSave;
 import com.example.ping_pong.model.GameSettings;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.io.File;
 import java.util.Optional;
+
+import static java.lang.System.exit;
 
 /**
  * Listens for menu actions and handles corresponding events and adjusting game settings.
@@ -17,7 +22,8 @@ public class MenuListener {
     private Game game;
     private GameSettings gameSettings;
     private SceneSwitcher sceneSwitcher;
-    private LabController gameController;
+    private GameController gameController;
+    private GameSerializer gameSerializer;
 
     /**
      * Constructs a new MenuListener with the specified Game, SceneSwitcher, and LabController.
@@ -27,9 +33,10 @@ public class MenuListener {
      * @param sceneSwitcher  the SceneSwitcher object for switching scenes
      * @param gameController the LabController object for controlling the game
      */
-    public MenuListener(Game game, SceneSwitcher sceneSwitcher, LabController gameController) {
+    public MenuListener(Game game, SceneSwitcher sceneSwitcher, GameController gameController) {
         this.game = game;
-        this.gameSettings = GameSettingsSerializer.deserialize();
+        this.gameSerializer = GameSerializer.getInstance();
+        this.gameSettings = gameSerializer.deserializeSettings();
         setInitialGameSettings();
         this.sceneSwitcher = sceneSwitcher;
         this.gameController = gameController;
@@ -39,11 +46,11 @@ public class MenuListener {
      * Sets the initial game settings based on the deserialized GameSettings object.
      */
     public void setInitialGameSettings() {
-        game.getPlayer1().setName(gameSettings.getPlayer1Name());
-        game.getPlayer1().setColor(gameSettings.getPlayer1Color());
+        game.getPlayer1().setName("Player 1");
+        game.getPlayer1().setColor(Color.RED);
 
-        game.getPlayer2().setName(gameSettings.getPlayer2Name());
-        game.getPlayer2().setColor(gameSettings.getPlayer2Color());
+        game.getPlayer2().setName("Player 2");
+        game.getPlayer2().setColor(Color.BLUE);
 
         setRacketThickness(gameSettings.getRacketThickness());
         setRacketWidth(gameSettings.getRacketWidth());
@@ -59,8 +66,9 @@ public class MenuListener {
      */
     public void setExit() {
         System.out.println("EXIT");
-        GameSettingsSerializer.serialize(gameSettings);
+        gameSerializer.serializeSettings(gameSettings);
         Platform.exit();
+        exit(0);
     }
 
     /**
@@ -121,22 +129,18 @@ public class MenuListener {
 
     public void setPlayer1Name(String playerName) {
         game.getPlayer1().setName(playerName);
-        gameSettings.setPlayer1Name(playerName);
     }
 
     public void setPlayer2Name(String playerName) {
         game.getPlayer2().setName(playerName);
-        gameSettings.setPlayer2Name(playerName);
     }
 
     public void setColor1(Color color) {
         game.getPlayer1().setColor(color);
-        gameSettings.setPlayer1Color(color);
     }
 
     public void setColor2(Color color) {
         game.getPlayer2().setColor(color);
-        gameSettings.setPlayer2Color(color);
     }
 
 
@@ -180,6 +184,65 @@ public class MenuListener {
     public void setScoreLimit(int scoreLimit) {
         game.setScoreLimit(scoreLimit);
         gameSettings.setScoreLimit(scoreLimit);
+    }
+
+    public String[] getSaveNames(){
+        File saveFolder = new File("data/saves");
+        File[] saves = saveFolder.listFiles();
+
+        if (saves == null || saves.length == 0 )
+            return null;
+
+        String[] namesOfSaves = new String[saves.length];
+
+        for(int i=0; i < saves.length; i++)
+            namesOfSaves[i] = saves[i].getName().substring(0, saves[i].getName().length()-4);
+
+        return namesOfSaves;
+    }
+
+    public void loadSave(GameSave save){
+        game.getPlayer1().setName(save.getPlayer1());
+        game.getPlayer1().setScore(save.getPlayer1Score());
+        game.getPlayer1().setColor(save.getPlayer1Color());
+
+        game.getPlayer2().setName(save.getPlayer2());
+        game.getPlayer2().setScore(save.getPlayer2Score());
+        game.getPlayer2().setColor(save.getPlayer2Color());
+    }
+
+    public void setLoadSave(){
+        String[] saves = getSaveNames();
+        if (saves == null){
+            var alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("NO SAVES FOUND");
+            alert.setHeaderText("No saves were found in a system.");
+            alert.showAndWait().ifPresent((btnType) -> {
+            });
+            return;
+        }
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(saves[0], saves);
+        dialog.setTitle("Name a save");
+        dialog.setHeaderText("Enter name of your save.");
+
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(saveName -> {
+            if(!saveName.isEmpty()){
+                GameSave save = gameSerializer.deserializeSave(saveName);
+                if(save != null){
+                    System.out.println("SAVE LOADED -" + saveName);
+                    loadSave(save);
+                    this.sceneSwitcher.switchToGame();
+                }
+                else
+                    showAlert(Alert.AlertType.ERROR, "Save is not loaded", "Problem occured while loading game. Try again later.");
+            }
+            else{
+                showAlert(Alert.AlertType.ERROR, "Empty input", "Save can not have empty name. Try again with proper input.");
+            }
+        });
     }
 
     /**
@@ -235,6 +298,57 @@ public class MenuListener {
     public void setBackToMenu() {
         gameController.restartGame();
         sceneSwitcher.switchToMainMenu();
+    }
+
+    /**
+     * Checks whether chosen name for a save is valid for creating file.
+     * @param name name of a save to be checked
+     * @return true if valid, false if not
+     */
+    public boolean isNameValidForFileName(String name){
+        if (name.contains("/") || name.contains("\\") || name.contains(":")
+                || name.contains("*") || name.contains("?") || name.contains("\"")
+                || name.contains("<") || name.contains(">") || name.contains("|")) {
+            return false;
+        }
+
+        // Check for leading and trailing spaces or periods
+        if (name.endsWith(" ") || name.endsWith(".") || name.startsWith(" ") || name.startsWith(".")) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Saves a game.
+     */
+    public void setSaveGame(){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Name a save");
+        dialog.setHeaderText("Enter name of your save.");
+
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(saveName -> {
+            if(!saveName.isEmpty() && isNameValidForFileName(saveName)){
+                GameSave save = getGameSaveInfo();
+
+                if(gameSerializer.serializeSave(save, saveName)){
+                    showAlert(Alert.AlertType.CONFIRMATION, "Game is saved", "Your game has been saved with name "+ saveName);
+                    return;
+                }
+
+            }
+
+            showAlert(Alert.AlertType.ERROR, "Wrong save name", "Save name can not contain special characters, end with space or dot, or be empty. Try again with proper save name.");
+
+        });
+    }
+
+    public GameSave getGameSaveInfo(){
+        return new GameSave(game.getPlayer1().getName(), game.getPlayer1().getScore(), game.getPlayer1().getColor(),
+                            game.getPlayer2().getName(), game.getPlayer2().getScore(), game.getPlayer2().getColor());
     }
 
 

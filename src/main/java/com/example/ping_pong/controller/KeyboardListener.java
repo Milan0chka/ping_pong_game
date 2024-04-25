@@ -10,7 +10,7 @@ import javafx.scene.input.KeyEvent;
  */
 public class KeyboardListener implements EventHandler<KeyEvent> {
     private Game game;
-    private LabController gameController;
+    private GameController gameController;
 
     /**
      * Constructs a new KeyboardListener with the specified game and game controller.
@@ -18,7 +18,7 @@ public class KeyboardListener implements EventHandler<KeyEvent> {
      * @param game           the Game object representing the game state
      * @param gameController the LabController object for controlling the game
      */
-    public KeyboardListener(Game game, LabController gameController) {
+    public KeyboardListener(Game game, GameController gameController) {
         this.game = game;
         this.gameController = gameController;
     }
@@ -34,21 +34,26 @@ public class KeyboardListener implements EventHandler<KeyEvent> {
         KeyCode key = keyEvent.getCode();
         double height = game.getHeigh();
 
-        if (!game.isPaused()) {
-            switch (key) {
-                case W -> game.getPlayer1().getRacket().moveUp(height);
-                case S -> game.getPlayer1().getRacket().moveDown(height);
-                case UP -> game.getPlayer2().getRacket().moveUp(height);
-                case DOWN -> game.getPlayer2().getRacket().moveDown(height);
+        if(key == KeyCode.ENTER){
+            if(game.isPaused()){
+                try {
+                    gameController.startGame();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
+            else {
+                game.setPaused(!game.isPaused());
+            }
+        }
+        else if (!game.isPaused()) {
+                switch (key) {
+                    case W -> game.getPlayer1().getRacket().moveUp(height);
+                    case S -> game.getPlayer1().getRacket().moveDown(height);
+                    case UP -> game.getPlayer2().getRacket().moveUp(height);
+                    case DOWN -> game.getPlayer2().getRacket().moveDown(height);
+                }
         }
 
-        if (key == KeyCode.ENTER) {
-            try {
-                gameController.startGame();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 }

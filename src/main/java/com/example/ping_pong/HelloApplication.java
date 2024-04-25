@@ -18,8 +18,8 @@ import java.io.IOException;
 public class HelloApplication extends Application implements SceneSwitcher {
 
     private LabCanvas canvas = new LabCanvas(650, 500);
-    private LabController labController = new LabController(canvas);
-    private MenuListener menuListener = new MenuListener(labController.getGame(), this, labController);
+    private GameController gameController = new GameController(canvas);
+    private MenuListener menuListener = new MenuListener(gameController.getGame(), this, gameController);
     private Menu menu = new Menu(menuListener);
     private StackPane rootPane;
     private Thread gameThread;
@@ -69,11 +69,11 @@ public class HelloApplication extends Application implements SceneSwitcher {
      */
     private void addWidthListener(Stage primaryStage) {
         primaryStage.widthProperty().addListener(observable -> {
-            double factor = primaryStage.getWidth() / labController.getGame().getWidth();
+            double factor = primaryStage.getWidth() / gameController.getGame().getWidth();
             System.out.println("Width changed " + primaryStage.getWidth() + " " + factor);
-            labController.getGame().setWidth(primaryStage.getWidth());
-            labController.getGame().resizeX(factor);
-            canvas.drawGame(labController.getGame());
+            gameController.getGame().setWidth(primaryStage.getWidth());
+            gameController.getGame().resizeX(factor);
+            canvas.drawGame(gameController.getGame());
         });
     }
 
@@ -84,11 +84,11 @@ public class HelloApplication extends Application implements SceneSwitcher {
      */
     private void addHeightListener(Stage primaryStage) {
         primaryStage.heightProperty().addListener(observable -> {
-            double factor = primaryStage.getHeight() / labController.getGame().getHeigh();
+            double factor = primaryStage.getHeight() / gameController.getGame().getHeigh();
             System.out.println("Height changed " + primaryStage.getHeight() + " " + factor);
-            labController.getGame().setHeigh(primaryStage.getHeight());
-            labController.getGame().resizeY(factor);
-            canvas.drawGame(labController.getGame());
+            gameController.getGame().setHeigh(primaryStage.getHeight());
+            gameController.getGame().resizeY(factor);
+            canvas.drawGame(gameController.getGame());
         });
     }
 
@@ -120,7 +120,7 @@ public class HelloApplication extends Application implements SceneSwitcher {
 
         StackPane.setAlignment(canvas, Pos.CENTER);
         rootPane.getChildren().add(canvas);
-        canvas.drawGame(labController.getGame());
+        canvas.drawGame(gameController.getGame());
 
         HBox gameMenu = menu.getGameMenu();
         StackPane.setAlignment(gameMenu, Pos.TOP_CENTER);
@@ -131,12 +131,12 @@ public class HelloApplication extends Application implements SceneSwitcher {
         StackPane.setAlignment(settingOverlay, Pos.CENTER);
         rootPane.getChildren().add(settingOverlay);
 
-        KeyboardListener keyboardListener = new KeyboardListener(labController.getGame(), labController);
+        KeyboardListener keyboardListener = new KeyboardListener(gameController.getGame(), gameController);
         canvas.setOnKeyPressed(keyboardListener);
         canvas.setOnKeyTyped(keyboardListener);
         canvas.setFocusTraversable(true);
 
-        BallManager ballManager = new BallManager(labController.getGame(), canvas, labController);
+        BallManager ballManager = new BallManager(gameController.getGame(), canvas, gameController);
         gameThread = new Thread(ballManager);
         gameThread.start();
     }

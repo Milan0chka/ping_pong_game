@@ -1,6 +1,6 @@
 .main-vbox {
     -fx-spacing: 20;
-    -fx-padding: 20;
+    -fx-padding: 10;
     -fx-font-family: 'Consolas';
     -fx-font-size: 16px;
     -fx-background-color: rgba(256, 256, 256, 0.85);
@@ -37,6 +37,7 @@
     -fx-background-color: #ffffff;
     -fx-border-color: linear-gradient(to bottom right, blue, red);
     -fx-text-fill: linear-gradient(to bottom right, blue, red);
+    -fx-spacing: 0;
 }
 
 .player1-score, .player2-score{

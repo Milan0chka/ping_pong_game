@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Controls the flow of the game and manages game states.
  */
-public class LabController {
+public class GameController {
     private Game game;
     private LabCanvas canvas;
     private boolean isGameOn;
@@ -20,7 +20,7 @@ public class LabController {
      *
      * @param labCanvas the LabCanvas object for rendering the game
      */
-    public LabController(LabCanvas labCanvas) {
+    public GameController(LabCanvas labCanvas) {
         this.game = new Game();
         this.canvas = labCanvas;
         isGameOn = true;
@@ -69,7 +69,6 @@ public class LabController {
         game.setPaused(true);
 
         canvas.drawGame(game);
-        canvas.drawPressEnter();
 
         isGameOn = true;
     }

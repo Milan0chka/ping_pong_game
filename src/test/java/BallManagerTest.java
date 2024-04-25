@@ -1,6 +1,6 @@
 import static org.junit.Assert.*;
 
-import com.example.ping_pong.controller.LabController;
+import com.example.ping_pong.controller.GameController;
 import org.junit.Before;
 import org.junit.Test;
 import com.example.ping_pong.model.Game;
@@ -9,9 +9,9 @@ import com.example.ping_pong.view.LabCanvas;
 
 public class BallManagerTest {
     LabCanvas canvas = new LabCanvas(600, 600);
-    LabController labController = new LabController(canvas);
-    Game game = labController.getGame();
-    BallManager manager = new BallManager(game, canvas, labController);
+    GameController gameController = new GameController(canvas);
+    Game game = gameController.getGame();
+    BallManager manager = new BallManager(game, canvas, gameController);
 
     @Before
     public void initialise() {
